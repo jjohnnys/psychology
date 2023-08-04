@@ -1,15 +1,16 @@
-package br.com.jjohnys.psychological_care.repository.jdbc;
+package br.com.jjohnys.psychological_care.patient.repository.jdbc;
 
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
-import br.com.jjohnys.psychological_care.domain.Patient;
-import br.com.jjohnys.psychological_care.repository.PatientRepository;
+import br.com.jjohnys.psychological_care.patient.domain.Patient;
+import br.com.jjohnys.psychological_care.patient.repository.PatientRepository;
 
 @Component
 public class PatientJDBC implements PatientRepository{
@@ -17,10 +18,10 @@ public class PatientJDBC implements PatientRepository{
     @Autowired
     JdbcTemplate jdbcTemplate;
 
-    public int insertPatient(String id, String name, String cpf, String rg, String email, String date_birth, Integer priceService, String  observation) {
+    public int insertPatient(Patient patient) {
 
         return jdbcTemplate.update("insert into patient (id, name, cpf, rg, email, date_birth, service_price, observation) values (?, ?, ?, ?, ?, ?, ?, ?)",
-        id, name, cpf, rg, email, date_birth, priceService, observation);
+        UUID.randomUUID().toString(), patient.getName(), patient.getCpf(), patient.getRg(), patient.getEmail(), patient.getDateBirth(), patient.getPriceService(), patient.getObservation());
     }
 
     @Override
