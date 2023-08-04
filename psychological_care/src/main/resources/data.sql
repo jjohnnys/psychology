@@ -1,4 +1,4 @@
-drop table atendimentopscdb.patient;
+drop table if exists atendimentopscdb.patient;
 create table atendimentopscdb.patient (
 	id varchar(255) not null,
     name varchar(255),
@@ -6,13 +6,14 @@ create table atendimentopscdb.patient (
     rg varchar(12),
     date_birth date,
     email varchar(255),
+    service_price int,
     observation varchar(500),
     primary key (id)
-) engine=InnoDB;
+) engine=InnoDB;    
 
 alter table atendimentopscdb.patient add constraint email_constraint unique (email);
 alter table atendimentopscdb.patient add constraint cpf_constraint unique (cpf);
 alter table atendimentopscdb.patient add constraint rg_constraint unique (rg);
 
 
-insert into patient (id, name, cpf, rg, email, date_birth, observation) values ('paciente_1', 'Seiya', '879.597.845-98', '74.682.668-4', 'seiya@email.com', '1988-04-14', 'Muito confiante');
+insert into patient (id, name, cpf, rg, email, date_birth, service_price, observation) values ('paciente_1', 'Seiya', '879.597.845-98', '74.682.668-4', 'seiya@email.com', '1988-04-14', 100, 'Muito confiante');
