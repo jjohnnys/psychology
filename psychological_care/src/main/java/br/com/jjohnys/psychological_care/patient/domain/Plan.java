@@ -7,7 +7,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Plain {
+public class Plan {
 
     @EqualsAndHashCode.Include
     private String id;

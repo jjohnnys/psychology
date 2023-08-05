@@ -1,8 +1,6 @@
 package br.com.jjohnys.psychological_care.patient.repository.jdbc;
 
-import java.sql.Date;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +15,13 @@ public class PatientJDBC implements PatientRepository{
 
     @Autowired
     JdbcTemplate jdbcTemplate;
+    @Autowired
+    PlanJDBC planJDBC;
 
     public int insertPatient(Patient patient) {
 
-        return jdbcTemplate.update("insert into patient (id, name, cpf, rg, email, date_birth, service_price, observation) values (?, ?, ?, ?, ?, ?, ?, ?)",
-        UUID.randomUUID().toString(), patient.getName(), patient.getCpf(), patient.getRg(), patient.getEmail(), patient.getDateBirth(), patient.getPriceService(), patient.getObservation());
+        return jdbcTemplate.update("insert into patient (id, name, cpf, rg, email, date_birth, plan_id, observation) values (?, ?, ?, ?, ?, ?, ?, ?)",
+        UUID.randomUUID().toString(), patient.getName(), patient.getCpf(), patient.getRg(), patient.getEmail(), patient.getDateBirth(), patient.getPlan().getId(), patient.getObservation());
     }
 
     @Override
@@ -34,7 +34,7 @@ public class PatientJDBC implements PatientRepository{
                 rs.getString("rg"), 
                 dateToLocalDate(rs.getString("date_birth")), 
                 rs.getString("email"), 
-                rs.getInt("service_price"), 
+                planJDBC.getPlanById(rs.getString("plan_id")), 
                 rs.getString("observation")
             ), new Object[]{name});
     }
@@ -49,7 +49,7 @@ public class PatientJDBC implements PatientRepository{
                 rs.getString("rg"), 
                 dateToLocalDate(rs.getString("date_birth")), 
                 rs.getString("email"), 
-                rs.getInt("service_price"), 
+                planJDBC.getPlanById(rs.getString("service_price")), 
                 rs.getString("observation")
             ), new Object[]{id});
     }

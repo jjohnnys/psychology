@@ -16,10 +16,10 @@ create table patient (
     rg varchar(12),
     date_birth date,
     email varchar(255),
-    plan_id varchar,
+    plan_id varchar(255),
     observation varchar(500),
     primary key (id),
-    foreign key (plan_id) references by plan (id)
+    foreign key (plan_id) references plan(id)
 ) engine=InnoDB;    
 
 alter table patient add constraint email_constraint unique (email);

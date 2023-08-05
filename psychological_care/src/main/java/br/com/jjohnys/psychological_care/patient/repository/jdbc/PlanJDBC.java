@@ -28,13 +28,13 @@ public class PlanJDBC implements PlanRepository{
     }
 
     public Plan getPlanById(String id) {
-        String query = "selecte * from plan where id = " + id;
+        String query = "select * from plan where id = '" + id + "'";
         return jdbcTemplate.queryForObject(query, (rs, rowNum) -> 
             new Plan(rs.getString("id"), rs.getString("type"), rs.getInt("price")));
     }
 
     public Plan getPlanByType(String type) {
-        String query = "selecte * from plan where type = " + type;
+        String query = "select * from plan where type = '" + type + "'";
         return jdbcTemplate.queryForObject(query, (rs, rowNum) -> 
             new Plan(rs.getString("id"), rs.getString("type"), rs.getInt("price")));
     }    

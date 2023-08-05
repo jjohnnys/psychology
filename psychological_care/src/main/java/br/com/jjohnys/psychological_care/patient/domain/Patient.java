@@ -1,4 +1,4 @@
-package br.com.jjohnys.psychological_care.domain;
+package br.com.jjohnys.psychological_care.patient.domain;
 
 import java.time.LocalDate;
 
@@ -21,7 +21,7 @@ public class Patient {
     private String rg;
     private LocalDate dateBirth;
     private String email;
-    private Integer priceService;
+    private Plan plan;
     @Setter
     private String observation;
 }
