@@ -21,7 +21,7 @@ public class PsychologicalSupportTest {
     private PatientRepository patientRepository;
 
     @Test
-    public void insertAndSelectPatient() {
+    public void testJdbcPatient() {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");        
         patientRepository.insertPatient(new Patient(null, "Ikki", "985.698.497-22", "99.689.695-5", LocalDate.parse("1987-04-15", formatter), "ikki@cdz.com", 100, "Forte"););
