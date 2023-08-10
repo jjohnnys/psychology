@@ -20,7 +20,15 @@ create table patient (
     observation varchar(500),
     primary key (id),
     foreign key (plan_id) references plan(id)
-) engine=InnoDB;    
+) engine=InnoDB;  
+
+create table support (
+    id varchar(255),
+    patient_id varchar(255),
+    date_suport datetime,
+    observation varchar(500),
+    primary key (id)   
+) engine=InnoDB;
 
 alter table patient add constraint email_constraint unique (email);
 alter table patient add constraint cpf_constraint unique (cpf);

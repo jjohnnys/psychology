@@ -1,5 +1,7 @@
 package br.com.jjohnys.psychological_care.patient.repository.jdbc;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -27,38 +29,30 @@ public class PatientJDBC implements PatientRepository{
     @Override
     public Patient findPatientByName(String name) {
         return jdbcTemplate.queryForObject("select * from patient where name = ?", (rs, rowNum) -> 
-            new Patient(
-                rs.getString("id"), 
-                rs.getString("name"), 
-                rs.getString("cpf"), 
-                rs.getString("rg"), 
-                dateToLocalDate(rs.getString("date_birth")), 
-                rs.getString("email"), 
-                planJDBC.getPlanById(rs.getString("plan_id")), 
-                rs.getString("observation")
-            ), new Object[]{name});
+            createPatient(rs), new Object[]{name});
     }
 
     @Override
     public Patient findPatientById(String id) {
         return jdbcTemplate.queryForObject("select * from patient where id = ?", (rs, rowNum) -> 
-            new Patient(
+            createPatient(rs), new Object[]{id});
+    }
+
+    private Patient createPatient(ResultSet rs) throws SQLException {
+        return new Patient(
                 rs.getString("id"), 
                 rs.getString("name"), 
                 rs.getString("cpf"), 
                 rs.getString("rg"), 
-                dateToLocalDate(rs.getString("date_birth")), 
+                (LocalDate.parse(rs.getString("date_birth"))), 
                 rs.getString("email"), 
                 planJDBC.getPlanById(rs.getString("service_price")), 
                 rs.getString("observation")
-            ), new Object[]{id});
+            );
+
+
     }
 
-    private LocalDate dateToLocalDate(String date) {
-
-
-        //date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        return LocalDate.parse(date);
-    }
+    
     
 }

@@ -42,8 +42,8 @@ public class PsychologicalSupportTest {
     }
 
 
-    public void createAtendPsycologicalSuportTest() {
-        
+    public void createPsycologicalSuportTest() {
+
     }
 
 
