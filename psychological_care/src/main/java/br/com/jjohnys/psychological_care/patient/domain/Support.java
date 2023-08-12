@@ -1,5 +1,6 @@
 package br.com.jjohnys.psychological_care.patient.domain;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;

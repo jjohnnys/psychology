@@ -9,6 +9,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Getter
+@Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @AllArgsConstructor
 @ToString
@@ -22,6 +23,5 @@ public class Patient {
     private LocalDate dateBirth;
     private String email;
     private Plan plan;
-    @Setter
     private String observation;
 }

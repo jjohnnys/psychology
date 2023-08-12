@@ -21,15 +21,19 @@ public class PatientJDBC implements PatientRepository{
     PlanJDBC planJDBC;
 
     public int insertPatient(Patient patient) {
-
         return jdbcTemplate.update("insert into patient (id, name, cpf, rg, email, date_birth, plan_id, observation) values (?, ?, ?, ?, ?, ?, ?, ?)",
         UUID.randomUUID().toString(), patient.getName(), patient.getCpf(), patient.getRg(), patient.getEmail(), patient.getDateBirth(), patient.getPlan().getId(), patient.getObservation());
     }
 
+    public int updatePatient(Patient patient) {
+        String update = "update patient set name = ?, cpf = ?, rg = ?, email = ?, date_birth = ?, plan_id = ?, observation = ? where id = ?";               
+        return jdbcTemplate.update(update, patient.getName(), patient.getCpf(), patient.getRg(), patient.getEmail(), patient.getDateBirth(), patient.getPlan().getId(), patient.getObservation(), patient.getId());
+    }
+
     @Override
-    public Patient findPatientByName(String name) {
-        return jdbcTemplate.queryForObject("select * from patient where name = ?", (rs, rowNum) -> 
-            createPatient(rs), new Object[]{name});
+    public Patient findPatientByName(String name) {        
+        return jdbcTemplate.queryForObject("select * from patient where name like ?", (rs, rowNum) -> 
+            createPatient(rs), new Object[]{"%"+name+"%"});
     }
 
     @Override
@@ -46,7 +50,7 @@ public class PatientJDBC implements PatientRepository{
                 rs.getString("rg"), 
                 (LocalDate.parse(rs.getString("date_birth"))), 
                 rs.getString("email"), 
-                planJDBC.getPlanById(rs.getString("service_price")), 
+                planJDBC.getPlanById(rs.getString("plan_id")), 
                 rs.getString("observation")
             );
 

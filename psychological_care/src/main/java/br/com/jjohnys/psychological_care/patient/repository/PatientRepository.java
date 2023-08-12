@@ -6,6 +6,8 @@ public interface PatientRepository {
 
     int insertPatient(Patient patient);
 
+    int updatePatient(Patient patient);
+
     Patient findPatientByName(String name);
 
     Patient findPatientById(String id);
