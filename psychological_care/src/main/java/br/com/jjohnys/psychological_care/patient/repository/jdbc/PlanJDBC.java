@@ -16,7 +16,7 @@ public class PlanJDBC implements PlanRepository{
     JdbcTemplate jdbcTemplate;
 
     public int insertPlan(Plan plan) {
-        return jdbcTemplate.update("insert into plan (id, type, price) values (?, ?, ?)",UUID.randomUUID().toString(), plan.getType(), plan.getPrice());        
+        return jdbcTemplate.update("insert into plan (id, type, price) values (?, ?, ?)", plan.getId(), plan.getType(), plan.getPrice());        
     }
 
     public int updatePlan(Plan plan) {

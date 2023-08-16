@@ -26,7 +26,7 @@ public class SupportJDBC implements SupportRepository {
     PatientJDBC patientJDBC;
 
     public int insertSupport(Support support) {
-        return jdbcTemplate.update("insert into support (id, patient_id, date_suport, observation) values (?, ?, ?, ?)", UUID.randomUUID().toString(), support.getPatient().getId(), support.getDateSuport(), support.getObservation());        
+        return jdbcTemplate.update("insert into support (id, patient_id, date_suport, observation) values (?, ?, ?, ?)", support.getId(), support.getPatient().getId(), support.getDateSuport(), support.getObservation());        
     }
 
     public int updateSupport(Support support) {

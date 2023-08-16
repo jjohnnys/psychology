@@ -23,5 +23,6 @@ public class Patient {
     private LocalDate dateBirth;
     private String email;
     private Plan plan;
+    private Patient responsible;
     private String observation;
 }

@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import br.com.jjohnys.psychological_care.patient.domain.Support;
 import br.com.jjohnys.psychological_care.patient.repository.PatientRepository;
 import br.com.jjohnys.psychological_care.patient.repository.PlanRepository;
 import br.com.jjohnys.psychological_care.patient.repository.SupportRepository;
+import br.com.jjohnys.psychological_care.utils.DateUtils;
 
 @SpringBootTest
 @SpringJUnitConfig
@@ -35,7 +37,7 @@ public class PsychologicalSupportTest {
 
     @Test
     public void jdbcPlanTest() {
-        planRepository.insertPlan(new Plan("plan_anual", "Anual", 10000));
+        planRepository.insertPlan(new Plan(UUID.randomUUID().toString(), "Anual", 10000));
         Plan plan = planRepository.getPlanByType("Anual");
         assertEquals("Anual", plan.getType(), "Plan ok");
     }
@@ -43,8 +45,7 @@ public class PsychologicalSupportTest {
     @Test
     public void jdbcPatientTest() {
         Plan plan = planRepository.getPlanByType("top");
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");        
-        patientRepository.insertPatient(new Patient(null, "Ikki", "985.698.497-22", "99.689.695-5", LocalDate.parse("1987-04-15", formatter), "ikki@cdz.com", plan, "Forte"));
+    patientRepository.insertPatient(new Patient(UUID.randomUUID().toString(), "Ikki", "985.698.497-22", "99.689.695-5", DateUtils.stringDateToLocalDate("1987-04-15"), "ikki@cdz.com", plan, null , "Forte"));
         Patient patient = patientRepository.findPatientByName("kk");
         assertEquals("Ikki", patient.getName(), "Name Ok");
 
@@ -54,18 +55,22 @@ public class PsychologicalSupportTest {
         Patient patienteUpdated = patientRepository.findPatientById(patient.getId());
         assertEquals("985.698.497-44", patienteUpdated.getCpf(), "Update Ok");
 
+        Patient minor = new Patient(UUID.randomUUID().toString(), "Esmeralda", "777.555.444-33", "55.444.333-2", DateUtils.stringDateToLocalDate("1992-02-22"), null, plan, patienteUpdated, "Gosta do Ikki");
+        patientRepository.insertPatient(minor);
+        Patient minorInserted = patientRepository.findPatientById(minor.getId());
+        assertEquals("985.698.497-44", minorInserted.getResponsible().getCpf(), "Menor ok");
     }
 
     @Test
     public void jdbcSuportTest() {
 
         Patient patient = patientRepository.findPatientByName("Seiya");
-        Support support = new Support(null, patient, LocalDateTime.now(), "Este paciente eh bom");
+        Support support = new Support(UUID.randomUUID().toString(), patient, LocalDateTime.now(), "Este paciente eh bom");
         supportRepository.insertSupport(support);
         List<Support> supportInserted = supportRepository.getSupportByPatient("Seiya");
         assertEquals("Seiya de Pagasus", supportInserted.get(0).getPatient().getName(), "Suport insert ok");
         
-        Support supportSeiya = new Support(null, patient, LocalDateTime.of(2023, 05, 10, 11, 10), "Este paciente eh bom");       
+        Support supportSeiya = new Support(UUID.randomUUID().toString(), patient, LocalDateTime.of(2023, 05, 10, 11, 10), "Este paciente eh bom");       
         
         supportRepository.insertSupport(supportSeiya);
         List<Support> supportSeiyaInserted = supportRepository.getSupportByDate(LocalDate.of(2023, 05, 10));
