@@ -20,7 +20,7 @@ public class PlanJDBC implements PlanRepository{
     }
 
     public int updatePlan(Plan plan) {
-        return jdbcTemplate.update("update plan set type, price) where id = ?", plan.getType(), plan.getType());
+        return jdbcTemplate.update("update plan set type = ?, price = ?) where id = ?", plan.getType(), plan.getType());
     }
 
     public int deletePlan(String id) {

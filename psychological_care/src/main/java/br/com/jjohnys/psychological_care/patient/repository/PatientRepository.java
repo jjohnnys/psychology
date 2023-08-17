@@ -1,5 +1,7 @@
 package br.com.jjohnys.psychological_care.patient.repository;
 
+import java.util.List;
+
 import br.com.jjohnys.psychological_care.patient.domain.Patient;
 
 public interface PatientRepository {
@@ -8,7 +10,7 @@ public interface PatientRepository {
 
     int updatePatient(Patient patient);
 
-    Patient findPatientByName(String name);
+    List<Patient> findPatientByName(String name);
 
     Patient findPatientById(String id);
     
