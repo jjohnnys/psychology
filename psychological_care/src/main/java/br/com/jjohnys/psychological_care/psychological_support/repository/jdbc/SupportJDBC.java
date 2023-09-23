@@ -1,21 +1,18 @@
-package br.com.jjohnys.psychological_care.patient.repository.jdbc;
+package br.com.jjohnys.psychological_care.psychological_support.repository.jdbc;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
-import br.com.jjohnys.psychological_care.patient.domain.Support;
-import br.com.jjohnys.psychological_care.patient.repository.SupportRepository;
+import br.com.jjohnys.psychological_care.patient.repository.jdbc.PatientJDBC;
+import br.com.jjohnys.psychological_care.psychological_support.Support;
+import br.com.jjohnys.psychological_care.psychological_support.repository.SupportRepository;
 
 @Component
 public class SupportJDBC implements SupportRepository {
@@ -42,13 +39,18 @@ public class SupportJDBC implements SupportRepository {
         return jdbcTemplate.queryForObject(query, (rs, rowNum) -> createSupport(rs));
     }
 
-    public List<Support> getSupportByDate(LocalDate dateSuport) {
-        String query = "select * from support where DATE(date_suport) = '" + dateSuport + "'";
+    public List<Support> getSupportByDate(LocalDate date) {
+        String query = "select * from support where DATE(date_suport) = '" + date + "'";
         return jdbcTemplate.query(query, (rs, rowNum) -> createSupport(rs));
     } 
 
     public List<Support> getSupportByPatient(String namePatiente) {
         String query = "select s.id, s.patient_id, s.date_suport, s.observation from support s, patient p where s.patient_id = p.id and p.name like '%" + namePatiente + "%'";
+        return jdbcTemplate.query(query, (rs, rowNum) -> createSupport(rs));
+    }
+
+    public List<Support> getPeriodOfSupportByPatientAndPeriod(String patienteId, LocalDate dateStart, LocalDate dateEnd) {
+        String query = "select s.id, s.patient_id, s.date_suport, s.observation from support s, patient p where s.patient_id = p.id and p.id = '" + patienteId + "' and DATE(date_suport) >= '" + dateStart + "' and DATE(date_suport) <= '" + dateEnd + "'";
         return jdbcTemplate.query(query, (rs, rowNum) -> createSupport(rs));
     }
 

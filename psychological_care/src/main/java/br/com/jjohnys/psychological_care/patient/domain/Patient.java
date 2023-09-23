@@ -11,12 +11,11 @@ import lombok.ToString;
 
 @Getter
 @Setter
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(of = "id")
 @AllArgsConstructor
 @ToString
 public class Patient {
 
-    @EqualsAndHashCode.Include
     private String id;
     private String name;
     private String cpf;

@@ -1,9 +1,9 @@
-package br.com.jjohnys.psychological_care.patient.repository;
+package br.com.jjohnys.psychological_care.psychological_support.repository;
 
 import java.time.LocalDate;
 import java.util.List;
 
-import br.com.jjohnys.psychological_care.patient.domain.Support;
+import br.com.jjohnys.psychological_care.psychological_support.Support;
 
 public interface SupportRepository {
 
@@ -13,6 +13,7 @@ public interface SupportRepository {
     Support getSupportById(String supportId);
     public List<Support> getSupportByDate(LocalDate dateSuport);
     public List<Support> getSupportByPatient(String namePatiente);
+    List<Support> getPeriodOfSupportByPatientAndPeriod(String patienteId, LocalDate dateStart, LocalDate dateEnd);
 
     
 }

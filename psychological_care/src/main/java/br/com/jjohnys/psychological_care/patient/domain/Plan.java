@@ -6,10 +6,9 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(of = "id")
 public class Plan {
 
-    @EqualsAndHashCode.Include
     private String id;
     private String type;
     private Integer price;

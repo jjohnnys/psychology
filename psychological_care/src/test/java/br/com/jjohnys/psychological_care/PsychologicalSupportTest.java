@@ -15,12 +15,12 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import br.com.jjohnys.psychological_care.patient.domain.Contact;
 import br.com.jjohnys.psychological_care.patient.domain.Patient;
 import br.com.jjohnys.psychological_care.patient.domain.Plan;
-import br.com.jjohnys.psychological_care.patient.domain.Support;
 import br.com.jjohnys.psychological_care.patient.domain.enums.Gender;
 import br.com.jjohnys.psychological_care.patient.repository.ContactRepository;
 import br.com.jjohnys.psychological_care.patient.repository.PatientRepository;
 import br.com.jjohnys.psychological_care.patient.repository.PlanRepository;
-import br.com.jjohnys.psychological_care.patient.repository.SupportRepository;
+import br.com.jjohnys.psychological_care.psychological_support.Support;
+import br.com.jjohnys.psychological_care.psychological_support.repository.SupportRepository;
 import br.com.jjohnys.psychological_care.utils.DateUtils;
 
 @SpringBootTest

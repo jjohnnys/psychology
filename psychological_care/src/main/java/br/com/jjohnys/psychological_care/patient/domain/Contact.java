@@ -8,10 +8,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(of = "id")
 public class Contact {
 
-    @EqualsAndHashCode.Include
     private String id;
     private String name;
     private String email;
