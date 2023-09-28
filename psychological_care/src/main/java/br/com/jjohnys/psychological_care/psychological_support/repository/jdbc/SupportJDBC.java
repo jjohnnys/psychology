@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
-import br.com.jjohnys.psychological_care.patient.repository.jdbc.PatientJDBC;
+import br.com.jjohnys.psychological_care.patient.infrastructure.jdbc.PatientJDBC;
 import br.com.jjohnys.psychological_care.psychological_support.Support;
 import br.com.jjohnys.psychological_care.psychological_support.repository.SupportRepository;
 

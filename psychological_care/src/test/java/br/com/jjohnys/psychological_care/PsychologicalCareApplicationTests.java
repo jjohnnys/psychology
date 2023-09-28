@@ -18,8 +18,8 @@ import br.com.jjohnys.psychological_care.exceptions.BusinessExceptions;
 import br.com.jjohnys.psychological_care.patient.domain.Patient;
 import br.com.jjohnys.psychological_care.patient.domain.Plan;
 import br.com.jjohnys.psychological_care.patient.domain.enums.Gender;
-import br.com.jjohnys.psychological_care.patient.repository.PatientRepository;
-import br.com.jjohnys.psychological_care.patient.repository.PlanRepository;
+import br.com.jjohnys.psychological_care.patient.gateways.PatientRepository;
+import br.com.jjohnys.psychological_care.patient.gateways.PlanRepository;
 import br.com.jjohnys.psychological_care.psychological_support.Support;
 import br.com.jjohnys.psychological_care.psychological_support.domain.ReceiptData;
 import br.com.jjohnys.psychological_care.psychological_support.repository.SupportRepository;
@@ -69,7 +69,7 @@ class PsychologicalCareApplicationTests {
 
 	private Patient createPatiente(String nome, String cpf, String rg) {
 		Plan plan = planRepository.getPlanById("plan_id");
-		Patient patient = new Patient(UUID.randomUUID().toString(), nome, cpf, rg, DateUtils.stringDateToLocalDate("1987-04-20"), plan, "Superior", Gender.MALE, "Siberia", null, "Gosta do frio");
+		Patient patient = new Patient(UUID.randomUUID().toString(), nome, cpf, rg, DateUtils.stringDateToLocalDate("1987-04-20"), plan, "Superior", Gender.MALE, "Siberia","Gosta do frio");
 		patientRepository.insertPatient(patient);
 		return patient;
 	}

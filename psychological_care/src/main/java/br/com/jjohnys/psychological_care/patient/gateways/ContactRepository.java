@@ -1,4 +1,4 @@
-package br.com.jjohnys.psychological_care.patient.repository;
+package br.com.jjohnys.psychological_care.patient.gateways;
 
 import java.util.List;
 

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 import br.com.jjohnys.psychological_care.exceptions.BusinessExceptions;
 import br.com.jjohnys.psychological_care.patient.domain.Patient;
-import br.com.jjohnys.psychological_care.patient.domain.Support;
+import br.com.jjohnys.psychological_care.psychological_support.Support;
 import br.com.jjohnys.psychological_care.psychological_support.domain.ReceiptData;
 import br.com.jjohnys.psychological_care.psychological_support.repository.SupportRepository;
 import br.com.jjohnys.psychological_care.utils.DateUtils;
@@ -31,11 +31,7 @@ public class ReceiptSupportService {
         totalSesions(supports.size()).
         totalValue(supports.size() * patient.getPlan().getPrice()).
         dates(supports.stream().map(suport -> DateUtils.localDateTimeToString(suport.getDateSuport())).collect(Collectors.joining(", "))).build();
-        if(patient.getResponsible() != null) {
-            receiptData.setResponsPatienteCPF(patient.getResponsible().getCpf());
-            receiptData.setResponsPatienteRG(patient.getResponsible().getRg());
-            receiptData.setResponsPatienteName(patient.getResponsible().getName());
-        }
+        
 
         return receiptData;
     }

@@ -1,4 +1,4 @@
-package br.com.jjohnys.psychological_care.patient.repository.jdbc;
+package br.com.jjohnys.psychological_care.patient.infrastructure.jdbc;
 
 import java.util.List;
 
@@ -7,7 +7,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import br.com.jjohnys.psychological_care.patient.domain.Contact;
-import br.com.jjohnys.psychological_care.patient.repository.ContactRepository;
+import br.com.jjohnys.psychological_care.patient.gateways.ContactRepository;
 
 @Component
 public class ContactJDBC implements ContactRepository {

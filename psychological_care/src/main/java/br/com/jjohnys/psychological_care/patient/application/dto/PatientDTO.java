@@ -1,20 +1,12 @@
-package br.com.jjohnys.psychological_care.patient.domain;
+package br.com.jjohnys.psychological_care.patient.application.dto;
 
 import java.time.LocalDate;
 
+import br.com.jjohnys.psychological_care.patient.domain.Patient;
+import br.com.jjohnys.psychological_care.patient.domain.Plan;
 import br.com.jjohnys.psychological_care.patient.domain.enums.Gender;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
 
-@Getter
-@Setter
-@EqualsAndHashCode(of = "id")
-@AllArgsConstructor
-@ToString
-public class Patient {
+public class PatientDTO {
 
     private String id;
     private String name;
@@ -25,5 +17,7 @@ public class Patient {
     private String schooling;
     private Gender gender;
     private String address;
-    private String observation;    
+    private Patient responsible;
+    private String observation;  
+    
 }

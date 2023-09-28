@@ -1,10 +1,9 @@
-package br.com.jjohnys.psychological_care.patient.repository.jdbc;
+package br.com.jjohnys.psychological_care.patient.infrastructure.jdbc;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -12,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 import br.com.jjohnys.psychological_care.patient.domain.Patient;
 import br.com.jjohnys.psychological_care.patient.domain.enums.Gender;
-import br.com.jjohnys.psychological_care.patient.repository.PatientRepository;
+import br.com.jjohnys.psychological_care.patient.gateways.PatientRepository;
 
 @Component
 public class PatientJDBC implements PatientRepository{
@@ -23,13 +22,13 @@ public class PatientJDBC implements PatientRepository{
     PlanJDBC planJDBC;
 
     public int insertPatient(Patient patient) {
-        return jdbcTemplate.update("insert into patient (id, name, cpf, rg, date_birth, plan_id, schooling, gender, address, responsible_id, observation) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-        patient.getId(), patient.getName(), patient.getCpf(), patient.getRg(), patient.getDateBirth(), patient.getPlan().getId(), patient.getSchooling(), patient.getGender().getDescription(), patient.getAddress(), responsibleId(patient.getResponsible()), patient.getObservation());
+        return jdbcTemplate.update("insert into patient (id, name, cpf, rg, date_birth, plan_id, schooling, gender, address, observation) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+        patient.getId(), patient.getName(), patient.getCpf(), patient.getRg(), patient.getDateBirth(), patient.getPlan().getId(), patient.getSchooling(), patient.getGender().getDescription(), patient.getAddress(), patient.getObservation());
     }
 
     public int updatePatient(Patient patient) {
-        String update = "update patient set name = ?, cpf = ?, rg = ?, date_birth = ?, plan_id = ?, schooling = ?, gender = ?, address = ?, responsible_id = ?, observation = ? where id = ?";               
-        return jdbcTemplate.update(update, patient.getName(), patient.getCpf(), patient.getRg(), patient.getDateBirth(), patient.getPlan().getId(),  patient.getSchooling(), patient.getGender().getDescription(), patient.getAddress(), responsibleId(patient.getResponsible()), patient.getObservation(), patient.getId());
+        String update = "update patient set name = ?, cpf = ?, rg = ?, date_birth = ?, plan_id = ?, schooling = ?, gender = ?, address = ?, observation = ? where id = ?";               
+        return jdbcTemplate.update(update, patient.getName(), patient.getCpf(), patient.getRg(), patient.getDateBirth(), patient.getPlan().getId(),  patient.getSchooling(), patient.getGender().getDescription(), patient.getAddress(), patient.getObservation(), patient.getId());
     }
 
     @Override
@@ -55,15 +54,8 @@ public class PatientJDBC implements PatientRepository{
                 rs.getString("schooling"),
                 Gender.getGenderEnum(rs.getString("gender")),
                 rs.getString("address"),
-                rs.getString("responsible_id") != null ? findPatientById(rs.getString("responsible_id")) : null,
                 rs.getString("observation")
             );
-    }
-
-    private String responsibleId(Patient patient) {
-        if(patient == null)
-            return null;
-        return patient.getId();
     }
 
     

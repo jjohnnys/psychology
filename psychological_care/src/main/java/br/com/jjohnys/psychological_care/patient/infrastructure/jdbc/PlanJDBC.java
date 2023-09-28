@@ -1,4 +1,4 @@
-package br.com.jjohnys.psychological_care.patient.repository.jdbc;
+package br.com.jjohnys.psychological_care.patient.infrastructure.jdbc;
 
 import java.util.UUID;
 
@@ -7,7 +7,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import br.com.jjohnys.psychological_care.patient.domain.Plan;
-import br.com.jjohnys.psychological_care.patient.repository.PlanRepository;
+import br.com.jjohnys.psychological_care.patient.gateways.PlanRepository;
 
 @Component
 public class PlanJDBC implements PlanRepository{
