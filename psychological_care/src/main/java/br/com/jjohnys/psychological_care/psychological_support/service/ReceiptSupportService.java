@@ -29,7 +29,6 @@ public class ReceiptSupportService {
         patientRG(patient.getRg()).
         patienteCPF(patient.getCpf()).
         totalSesions(supports.size()).
-        totalValue(supports.size() * patient.getPlan().getPrice()).
         dates(supports.stream().map(suport -> DateUtils.localDateTimeToString(suport.getDateSuport())).collect(Collectors.joining(", "))).build();
         
 

@@ -4,40 +4,36 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import br.com.jjohnys.psychological_care.patient.domain.Patient;
 import br.com.jjohnys.psychological_care.patient.domain.enums.Gender;
-import br.com.jjohnys.psychological_care.patient.gateways.PatientRepository;
 
-@Component
-public class PatientJDBC implements PatientRepository{
+@Repository
+public class PatientJDBC{
 
     @Autowired
     JdbcTemplate jdbcTemplate;
-    @Autowired
-    PlanJDBC planJDBC;
 
     public int insertPatient(Patient patient) {
-        return jdbcTemplate.update("insert into patient (id, name, cpf, rg, date_birth, plan_id, schooling, gender, address, observation) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-        patient.getId(), patient.getName(), patient.getCpf(), patient.getRg(), patient.getDateBirth(), patient.getPlan().getId(), patient.getSchooling(), patient.getGender().getDescription(), patient.getAddress(), patient.getObservation());
+        return jdbcTemplate.update("insert into patient (id, name, cpf, rg, date_birth, price, schooling, gender, address, observation) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+        genereteID(patient.getId()), patient.getName(), patient.getCpf(), patient.getRg(), patient.getDateBirth(), patient.getPrice(), patient.getSchooling(), patient.getGender().getDescription(), patient.getAddress(), patient.getObservation());
     }
 
     public int updatePatient(Patient patient) {
-        String update = "update patient set name = ?, cpf = ?, rg = ?, date_birth = ?, plan_id = ?, schooling = ?, gender = ?, address = ?, observation = ? where id = ?";               
-        return jdbcTemplate.update(update, patient.getName(), patient.getCpf(), patient.getRg(), patient.getDateBirth(), patient.getPlan().getId(),  patient.getSchooling(), patient.getGender().getDescription(), patient.getAddress(), patient.getObservation(), patient.getId());
+        String update = "update patient set name = ?, cpf = ?, rg = ?, date_birth = ?, price = ?, schooling = ?, gender = ?, address = ?, observation = ? where id = ?";               
+        return jdbcTemplate.update(update, patient.getName(), patient.getCpf(), patient.getRg(), patient.getDateBirth(), patient.getPrice(),  patient.getSchooling(), patient.getGender().getDescription(), patient.getAddress(), patient.getObservation(), patient.getId());
     }
 
-    @Override
     public List<Patient> findPatientByName(String name) {        
         return jdbcTemplate.query("select * from patient where name like ?", (rs, rowNum) -> 
             createPatient(rs), new Object[]{"%"+name+"%"});
     }
 
-    @Override
     public Patient findPatientById(String id) {
         return jdbcTemplate.queryForObject("select * from patient where id = ?", (rs, rowNum) -> 
             createPatient(rs), new Object[]{id});
@@ -50,12 +46,17 @@ public class PatientJDBC implements PatientRepository{
                 rs.getString("cpf"), 
                 rs.getString("rg"), 
                 (LocalDate.parse(rs.getString("date_birth"))),
-                planJDBC.getPlanById(rs.getString("plan_id")),
+                (rs.getInt("price")),
                 rs.getString("schooling"),
                 Gender.getGenderEnum(rs.getString("gender")),
                 rs.getString("address"),
                 rs.getString("observation")
             );
+    }
+
+    private String genereteID(String id) {
+        if(id == null || id.isBlank()) return UUID.randomUUID().toString();
+        return id;
     }
 
     

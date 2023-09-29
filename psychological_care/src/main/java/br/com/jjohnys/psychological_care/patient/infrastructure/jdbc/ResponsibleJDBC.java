@@ -22,19 +22,19 @@ public class ResponsibleJDBC {
 
     public void insertResponsible(Responsible responsible) {
 
-        jdbcTemplate.update("insert into responsible (id, name, cpf, rg, date_birth, patient_id) values (?, ?, ?, ?, ?, ?)", 
+        jdbcTemplate.update("insert into responsible (id, name, cpf, rg, date_birth, parentenge = ?, patient_id) values (?, ?, ?, ?, ?, ?)", 
         responsible.getId(), responsible.getName(), responsible.getCpf(), responsible.getRg(), responsible.getDateBirth(), responsible.getPatient().getId());      
 
     }
 
     public void updateResponsible(Responsible responsible) {
-        jdbcTemplate.update("update responsible set name = ?, cpf = ?, rg = ? date_birth = ?, patient_id = ? where id = ?",
+        jdbcTemplate.update("update responsible set name = ?, cpf = ?, rg = ? date_birth = ?, parentenge = ?, patient_id = ? where id = ?",
          responsible.getName(), responsible.getCpf(), responsible.getRg(), responsible.getDateBirth(),responsible.getPatient().getId() , responsible.getId());
     }
 
     public List<Responsible> findResponsiblesByPatientId(String patientId) {
         String query = "select " +
-                        " id, name, cpf, rg, date_birth, patient_id " +
+                        " id, name, cpf, rg, date_birth, parentenge, patient_id " +
                         " from  " +
                         " responsible , " +
                         " patient p " +
@@ -45,7 +45,7 @@ public class ResponsibleJDBC {
 
     public List<Responsible> findResponsiblesByPatientName(String patientName) {
         String query = "select " +
-                        " r.id, r.name, r.cpf, r.rg, r.date_birth, r.patient_id " +
+                        " r.id, r.name, r.cpf, r.rg, r.date_birth, parentenge, r.patient_id " +
                         " from  " +
                         " responsible r, " +
                         " patient p " +
@@ -62,6 +62,7 @@ public class ResponsibleJDBC {
             rs.getString("cpf"), 
             rs.getString("rg"), 
             (LocalDate.parse(rs.getString("date_birth"))), 
+            rs.getString("parentenge"),
             patientJDBC.findPatientById(rs.getString("patient_id")));
     }
     

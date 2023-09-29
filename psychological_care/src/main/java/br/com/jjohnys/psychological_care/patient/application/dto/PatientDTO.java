@@ -1,11 +1,15 @@
 package br.com.jjohnys.psychological_care.patient.application.dto;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
-import br.com.jjohnys.psychological_care.patient.domain.Patient;
-import br.com.jjohnys.psychological_care.patient.domain.Plan;
-import br.com.jjohnys.psychological_care.patient.domain.enums.Gender;
+import br.com.jjohnys.psychological_care.patient.domain.Responsible;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
+@Getter 
+@AllArgsConstructor
 public class PatientDTO {
 
     private String id;
@@ -13,11 +17,23 @@ public class PatientDTO {
     private String cpf;
     private String rg;
     private LocalDate dateBirth;
-    private Plan plan;
+    private Integer price;
     private String schooling;
-    private Gender gender;
+    private String gender;
     private String address;
-    private Patient responsible;
-    private String observation;  
+    private ResponsibleDTO responsible;
+    private String observation; 
+    private List<ContactDTO> contacts = new ArrayList<ContactDTO>(); 
+
+    @AllArgsConstructor
+    @Getter
+    public class ResponsibleDTO {
+        private String name;
+        private String cpf;
+        private String rg;
+        private LocalDate dateBirth;
+        private String parentenge;
+        private List<ContactDTO> contacts = new ArrayList<ContactDTO>();
+    }
     
 }

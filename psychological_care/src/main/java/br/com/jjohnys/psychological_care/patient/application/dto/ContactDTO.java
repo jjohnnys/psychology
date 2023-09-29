@@ -13,5 +13,6 @@ public class ContactDTO {
     private String telephone;
     private String parentage;
     private String patientId;
+    private String responsibleId;
     
 }

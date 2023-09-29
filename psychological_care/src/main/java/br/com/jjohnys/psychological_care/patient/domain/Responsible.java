@@ -17,6 +17,7 @@ public class Responsible {
     private String cpf;
     private String rg;
     private LocalDate dateBirth;
+    private String parentege;
     private Patient patient;
 
 

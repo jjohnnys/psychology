@@ -15,7 +15,7 @@ public class Contact {
     private String name;
     private String email;
     private String telephone;
-    private String parentage;
     private String patientId;
+    private String responsibleId;
     
 }

@@ -21,7 +21,7 @@ public class Patient {
     private String cpf;
     private String rg;
     private LocalDate dateBirth;
-    private Plan plan;
+    private Integer price;
     private String schooling;
     private Gender gender;
     private String address;

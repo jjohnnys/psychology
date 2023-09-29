@@ -2,24 +2,21 @@ package br.com.jjohnys.psychological_care;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import br.com.jjohnys.psychological_care.exceptions.BusinessExceptions;
 import br.com.jjohnys.psychological_care.patient.domain.Patient;
-import br.com.jjohnys.psychological_care.patient.domain.Plan;
 import br.com.jjohnys.psychological_care.patient.domain.enums.Gender;
 import br.com.jjohnys.psychological_care.patient.gateways.PatientRepository;
-import br.com.jjohnys.psychological_care.patient.gateways.PlanRepository;
+import br.com.jjohnys.psychological_care.patient.infrastructure.jdbc.PatientJDBC;
 import br.com.jjohnys.psychological_care.psychological_support.Support;
 import br.com.jjohnys.psychological_care.psychological_support.domain.ReceiptData;
 import br.com.jjohnys.psychological_care.psychological_support.repository.SupportRepository;
@@ -34,9 +31,7 @@ class PsychologicalCareApplicationTests {
 	}
 
 	@Autowired
-	private PatientRepository patientRepository;
-	@Autowired
-	private PlanRepository planRepository;
+	private PatientJDBC patientJDBC;
 	@Autowired
 	private SupportRepository supportRepository;
 	@Autowired
@@ -68,9 +63,8 @@ class PsychologicalCareApplicationTests {
 	}
 
 	private Patient createPatiente(String nome, String cpf, String rg) {
-		Plan plan = planRepository.getPlanById("plan_id");
-		Patient patient = new Patient(UUID.randomUUID().toString(), nome, cpf, rg, DateUtils.stringDateToLocalDate("1987-04-20"), plan, "Superior", Gender.MALE, "Siberia","Gosta do frio");
-		patientRepository.insertPatient(patient);
+		Patient patient = new Patient(UUID.randomUUID().toString(), nome, cpf, rg, DateUtils.stringDateToLocalDate("1987-04-20"), 100, "Superior", Gender.MALE, "Siberia","Gosta do frio");
+		patientJDBC.insertPatient(patient);
 		return patient;
 	}
 
