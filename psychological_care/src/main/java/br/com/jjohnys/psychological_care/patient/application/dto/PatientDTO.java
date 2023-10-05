@@ -4,36 +4,31 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.jjohnys.psychological_care.patient.domain.Responsible;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
-@Getter 
-@AllArgsConstructor
-public class PatientDTO {
-
-    private String id;
-    private String name;
-    private String cpf;
-    private String rg;
-    private LocalDate dateBirth;
-    private Integer price;
-    private String schooling;
-    private String gender;
-    private String address;
-    private ResponsibleDTO responsible;
-    private String observation; 
-    private List<ContactDTO> contacts = new ArrayList<ContactDTO>(); 
-
-    @AllArgsConstructor
-    @Getter
-    public class ResponsibleDTO {
-        private String name;
-        private String cpf;
-        private String rg;
-        private LocalDate dateBirth;
-        private String parentenge;
-        private List<ContactDTO> contacts = new ArrayList<ContactDTO>();
+public record PatientDTO (
+              String id,
+              String name,
+              String cpf,
+              String rg,
+              LocalDate dateBirth,
+              Integer price,
+              String schooling,
+              String gender,
+              String address,
+              ResponsibleDTO responsible,
+              String observation,
+              List<ContactDTO> contacts) {
+    
+    public List<ContactDTO> getContacts() {
+        if(this.contacts == null) return new ArrayList<ContactDTO>();
+        return this.contacts;
+    }
+        
+    public record ResponsibleDTO(String name, String cpf, String rg, LocalDate dateBirth, String parentenge, List<ContactDTO> contacts) {
+    
+        public List<ContactDTO> getContacts() {
+        if(this.contacts == null) return new ArrayList<ContactDTO>();
+        return this.contacts;
+        }
     }
     
 }

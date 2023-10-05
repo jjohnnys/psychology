@@ -47,7 +47,7 @@ public class PsychologicalSupportTest {
 
         patientJDBC.insertPatient(new Patient(UUID.randomUUID().toString(), "Ikki", "985.698.497-22", "99.689.695-5", DateUtils.stringDateToLocalDate("1987-04-15"), 100, "PosGraduado", Gender.MALE, "Gercia, 100", "Forte"));
         List<Patient> patients = patientJDBC.findPatientByName("kk");
-        Contact contactIkki = new Contact(UUID.randomUUID().toString(), null, "ikki@mail.com", "85 98745", patients.get(0).getId(), null);
+        Contact contactIkki = Contact.buildPatientContact(UUID.randomUUID().toString(), null, "ikki@mail.com", "85 98745", patients.get(0).getId());
         contactRepository.insertContact(contactIkki);
         List<Contact> contactCreated = contactRepository.getContactById(contactIkki.getId());
         assertEquals("Ikki", patients.get(0).getName(), "Name Ok");
@@ -62,9 +62,9 @@ public class PsychologicalSupportTest {
         Patient minor = new Patient(UUID.randomUUID().toString(), "Esmeralda", "777.555.444-33", "55.444.333-2", DateUtils.stringDateToLocalDate("1992-02-22"), 100, "PosGraduado", Gender.FEMALE, "Gercia", "Gosta do Ikki");
         patientJDBC.insertPatient(minor);
         Patient minorInserted = patientJDBC.findPatientById(minor.getId());
-        Contact contactEsmeralda = new Contact(UUID.randomUUID().toString(), null, "esmeralda@mail.com", "85 98744", minorInserted.getId(), null);
+        Contact contactEsmeralda = Contact.buildPatientContact(UUID.randomUUID().toString(), null, "esmeralda@mail.com", "85 98744", minorInserted.getId());
         contactRepository.insertContact(contactEsmeralda);
-        Contact contactParanteOfEsmeralda = new Contact(UUID.randomUUID().toString(), "Ikki", "ikki@mail.com", "85 98745", minorInserted.getId(), null);
+        Contact contactParanteOfEsmeralda = Contact.buildPatientContact(UUID.randomUUID().toString(), "Ikki", "ikki@mail.com", "85 98745", minorInserted.getId());
         contactRepository.insertContact(contactParanteOfEsmeralda);
         contactRepository.updateContact(contactParanteOfEsmeralda);
         //assertEquals("985.698.497-44", minorInserted.getResponsible().getCpf(), "Menor ok");

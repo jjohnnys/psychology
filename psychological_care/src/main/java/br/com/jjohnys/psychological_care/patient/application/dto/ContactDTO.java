@@ -1,18 +1,11 @@
 package br.com.jjohnys.psychological_care.patient.application.dto;
 
-import lombok.Builder;
-import lombok.Getter;
-
-@Getter
-@Builder
-public class ContactDTO {
-
-    private String id;
-    private String name;
-    private String email;
-    private String telephone;
-    private String parentage;
-    private String patientId;
-    private String responsibleId;
-    
+public record ContactDTO (
+                String id, 
+                String name, 
+                String email, 
+                String telephone, 
+                String parentage, 
+                String patientId, 
+                String responsibleId) {
 }

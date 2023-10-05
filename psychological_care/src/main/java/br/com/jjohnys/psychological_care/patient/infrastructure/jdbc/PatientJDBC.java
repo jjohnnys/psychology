@@ -39,6 +39,11 @@ public class PatientJDBC{
             createPatient(rs), new Object[]{id});
     }
 
+    public Patient findPatientByCPF(String cpf) {
+        return jdbcTemplate.queryForObject("select * from patient where cpf = ?", (rs, rowNum) -> 
+            createPatient(rs), new Object[]{cpf});
+    }
+
     private Patient createPatient(ResultSet rs) throws SQLException {
         return new Patient(
                 rs.getString("id"), 

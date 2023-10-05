@@ -14,5 +14,5 @@ public interface PatientRepository {
 
     List<Patient> findPatientByName(String name);
 
-    Patient findPatientById(String id);    
+    Patient findPatientById(String id); 
 }

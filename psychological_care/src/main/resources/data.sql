@@ -52,6 +52,8 @@ create table support (
 
 alter table patient add constraint cpf_constraint unique (cpf);
 alter table patient add constraint rg_constraint unique (rg);
+alter table responsible add constraint cpf_constraint_responsible unique (cpf);
+alter table responsible add constraint rg_constraint_responsible unique (rg);
 
 insert into patient (id, name, cpf, rg, date_birth, price, schooling, gender, address, observation) values ('paciente_1', 'Seiya de Pagasus', '879.597.845-98', '74.682.668-4', '1988-04-14', 100, 'Superior completo', 'Masculino', 'Grecia', 'Muito confiante');
 insert into patient (id, name, cpf, rg, date_birth, price, schooling, gender, address, observation) values ('paciente_2', 'Saori Athena', '215.444.554-88', '11.22.654-7', '1991-09-15', 100, 'Dontorado', 'Feminino', 'Grecia', 'Poderosa');

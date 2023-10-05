@@ -41,13 +41,22 @@ public class ContactJDBC implements ContactRepository {
     }
 
     private Contact createContact(ResultSet rs) throws SQLException {
-       return new Contact(
-                    rs.getString("id"),
-                    rs.getString("name"),
-                    rs.getString("email"),
-                    rs.getString("telephone"),
-                    rs.getString("patient_id"),
-                    rs.getString("responsible_id"));
+
+        if(!rs.getString("patient_id").isBlank())
+            return Contact.buildPatientContact(
+                            rs.getString("id"),
+                            rs.getString("name"),
+                            rs.getString("email"),
+                            rs.getString("telephone"),
+                            rs.getString("patient_id"));
+        else {
+            return Contact.buildResponsibleContact(
+                            rs.getString("id"),
+                            rs.getString("name"),
+                            rs.getString("email"),
+                            rs.getString("telephone"),
+                            rs.getString("responsible_id"));
+        }                            
 
     }
     

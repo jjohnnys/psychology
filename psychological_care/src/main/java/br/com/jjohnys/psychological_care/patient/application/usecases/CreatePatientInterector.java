@@ -4,63 +4,35 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import br.com.jjohnys.psychological_care.patient.application.dto.ContactDTO;
+import org.springframework.stereotype.Service;
+
 import br.com.jjohnys.psychological_care.patient.application.dto.PatientDTO;
 import br.com.jjohnys.psychological_care.patient.domain.Contact;
 import br.com.jjohnys.psychological_care.patient.domain.Patient;
 import br.com.jjohnys.psychological_care.patient.domain.Responsible;
 import br.com.jjohnys.psychological_care.patient.domain.enums.Gender;
 
+@Service
 public class CreatePatientInterector {
+
+     
 
     public void createPatient(PatientDTO patientDTO) {
 
-        List<Contact> contactsPatient = createDomainPatientContacts(patientDTO.getContacts());
+        Patient patient = new Patient(UUID.randomUUID().toString(), patientDTO.name(), patientDTO.cpf(), patientDTO.rg(), patientDTO.dateBirth(), patientDTO.price(),patientDTO.schooling(), Gender.getGenderEnum(patientDTO.gender()), patientDTO.address(), patientDTO.observation());
+        List<Contact> contactsPatient = patientDTO.getContacts().stream().map(dto -> Contact.buildPatientContact(UUID.randomUUID().toString(), dto.name(), dto.email(), dto.telephone(), dto.patientId())).collect(Collectors.toList());
         List<Contact> contactsResponsible = null;
-        if(patientDTO.getResponsible() != null)
-            contactsResponsible = createDomainResponsibleContacts(patientDTO.getResponsible().getContacts());
-        
+        Responsible responsible = null;
+        if(patientDTO.responsible() != null)
+            contactsResponsible = patientDTO.responsible().getContacts().stream().map(dto -> Contact.buildResponsibleContact(UUID.randomUUID().toString(), dto.name(), dto.email(), dto.telephone(), dto.responsibleId())).collect(Collectors.toList());                
+            responsible = new Responsible(null, patientDTO.responsible().name(), patientDTO.responsible().cpf(), patientDTO.responsible().rg(), patientDTO.responsible().dateBirth(), patientDTO.responsible().parentenge(), patient);
+
+
 
         
-
-        
     }
 
-    private Responsible createDomainResponsible(PatientDTO.ResponsibleDTO responsibleDTO, Patient patient) {
-        return new Responsible(null, responsibleDTO.getName(), responsibleDTO.getCpf(), responsibleDTO.getRg(), responsibleDTO.getDateBirth(), responsibleDTO.getParentenge(), patient);
-    }
-
-    private Patient createDomaiPatient(PatientDTO patientDTO) {
-        return new Patient(UUID.randomUUID().toString(), 
-                   patientDTO.getName(), 
-                   patientDTO.getCpf(), 
-                   patientDTO.getRg(), 
-                   patientDTO.getDateBirth(), 
-                   patientDTO.getPrice(),
-                   patientDTO.getSchooling(), 
-                   Gender.getGenderEnum(patientDTO.getGender()), 
-                   patientDTO.getAddress(), 
-                   patientDTO.getObservation());
-    }
-
-    private List<Contact> createDomainPatientContacts(List<ContactDTO> contactDTOs) {
-        return  contactDTOs.stream().map(dto -> new Contact(
-                UUID.randomUUID().toString(),
-                dto.getName(),
-                dto.getEmail(),
-                dto.getTelephone(),
-                dto.getPatientId(), 
-                null)).collect(Collectors.toList());
-    }
-
-    private List<Contact> createDomainResponsibleContacts(List<ContactDTO> contactDTOs) {
-        return  contactDTOs.stream().map(dto -> new Contact(
-                UUID.randomUUID().toString(),
-                dto.getName(),
-                dto.getEmail(),
-                dto.getTelephone(),
-                null, dto.getResponsibleId())).collect(Collectors.toList());
-    }
+    
 
     
     

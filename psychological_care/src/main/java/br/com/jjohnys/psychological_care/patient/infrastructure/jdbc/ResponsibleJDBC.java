@@ -32,6 +32,12 @@ public class ResponsibleJDBC {
          responsible.getName(), responsible.getCpf(), responsible.getRg(), responsible.getDateBirth(),responsible.getPatient().getId() , responsible.getId());
     }
 
+    public Responsible findResponsiblesByCPF(String cpf) {
+        String query = "select * from where cpf = ? ";
+      return jdbcTemplate.queryForObject(query, (rs, rowNum) -> createResponsible(rs), new Object[]{cpf});
+
+    }
+
     public List<Responsible> findResponsiblesByPatientId(String patientId) {
         String query = "select " +
                         " id, name, cpf, rg, date_birth, parentenge, patient_id " +
