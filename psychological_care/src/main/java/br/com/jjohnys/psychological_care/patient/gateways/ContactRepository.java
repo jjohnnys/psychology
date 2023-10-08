@@ -9,5 +9,7 @@ public interface ContactRepository {
     int insertContact(Contact contact);
     int updateContact(Contact contact);
     List<Contact> getContactById(String id);
+    void saveAll(List<Contact> contacts);
+    void updateAll(List<Contact> contacts);
     
 }

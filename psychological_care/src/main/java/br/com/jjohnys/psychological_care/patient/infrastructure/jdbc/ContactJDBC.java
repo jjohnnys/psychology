@@ -40,6 +40,16 @@ public class ContactJDBC implements ContactRepository {
         return jdbcTemplate.query(query, (rs, rowNum) -> createContact(rs));
     }
 
+    @Override
+    public void saveAll(List<Contact> contacts) {
+        contacts.forEach(contact -> this.insertContact(contact));
+    }
+
+    @Override
+    public void updateAll(List<Contact> contacts) {
+        contacts.forEach(contact -> this.updateContact(contact));
+    }
+
     private Contact createContact(ResultSet rs) throws SQLException {
 
         if(!rs.getString("patient_id").isBlank())
@@ -59,5 +69,7 @@ public class ContactJDBC implements ContactRepository {
         }                            
 
     }
+
+    
     
 }

@@ -52,9 +52,8 @@ public class PsychologicalSupportTest {
         List<Contact> contactCreated = contactRepository.getContactById(contactIkki.getId());
         assertEquals("Ikki", patients.get(0).getName(), "Name Ok");
         assertEquals(patients.get(0).getId(), contactCreated.get(0).getPatientId(), "Name Ok");
-
-        patients.get(0).setCpf("985.698.497-44");
-        patientJDBC.updatePatient(patients.get(0));
+        
+        patientJDBC.updatePatient(new Patient(patients.get(0).getId(), patients.get(0).getName(), "985.698.497-44", patients.get(0).getRg(), patients.get(0).getDateBirth(), patients.get(0).getPrice(), patients.get(0).getSchooling(), patients.get(0).getGender(), patients.get(0).getAddress(), patients.get(0).getObservation()));
 
         Patient patienteUpdated = patientJDBC.findPatientById(patients.get(0).getId());
         assertEquals("985.698.497-44", patienteUpdated.getCpf(), "Update Ok");

@@ -15,7 +15,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import br.com.jjohnys.psychological_care.exceptions.BusinessExceptions;
 import br.com.jjohnys.psychological_care.patient.domain.Patient;
 import br.com.jjohnys.psychological_care.patient.domain.enums.Gender;
-import br.com.jjohnys.psychological_care.patient.gateways.PatientRepository;
 import br.com.jjohnys.psychological_care.patient.infrastructure.jdbc.PatientJDBC;
 import br.com.jjohnys.psychological_care.psychological_support.Support;
 import br.com.jjohnys.psychological_care.psychological_support.domain.ReceiptData;

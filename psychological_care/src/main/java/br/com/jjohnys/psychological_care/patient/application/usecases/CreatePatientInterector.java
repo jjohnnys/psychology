@@ -11,11 +11,14 @@ import br.com.jjohnys.psychological_care.patient.domain.Contact;
 import br.com.jjohnys.psychological_care.patient.domain.Patient;
 import br.com.jjohnys.psychological_care.patient.domain.Responsible;
 import br.com.jjohnys.psychological_care.patient.domain.enums.Gender;
+import br.com.jjohnys.psychological_care.patient.gateways.PatientRepository;
+import lombok.NonNull;
 
 @Service
 public class CreatePatientInterector {
 
-     
+    @NonNull
+    private PatientRepository patientRepository;
 
     public void createPatient(PatientDTO patientDTO) {
 
@@ -28,7 +31,7 @@ public class CreatePatientInterector {
             responsible = new Responsible(null, patientDTO.responsible().name(), patientDTO.responsible().cpf(), patientDTO.responsible().rg(), patientDTO.responsible().dateBirth(), patientDTO.responsible().parentenge(), patient);
 
 
-
+        patientRepository.insertPatient(patient, contactsPatient, responsible, contactsResponsible);        
         
     }
 

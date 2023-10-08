@@ -8,7 +8,7 @@ import br.com.jjohnys.psychological_care.patient.domain.Responsible;
 
 public interface PatientRepository {
 
-    int insertPatient(Patient patient, List<Contact> contactsPatient, Responsible responsible, List<Contact> contactsResponsible);
+    void insertPatient(Patient patient, List<Contact> contactsPatient, Responsible responsible, List<Contact> contactsResponsible);
 
     int updatePatient(Patient patient);
 
