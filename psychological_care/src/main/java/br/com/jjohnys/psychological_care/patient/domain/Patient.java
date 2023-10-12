@@ -25,8 +25,8 @@ public class Patient {
     private Gender gender;
     private String address;
     private String observation;
-    private Responsible responsible;
-    private List<Contact> contacts = new ArrayList<>(null);
+    private List<Responsible> responsibles;
+    private List<Contact> contacts = new ArrayList<Contact>();
 
     public Patient(String id, String name, String cpf, String rg, LocalDate dateBirth, Integer price, String schooling,
             Gender gender, String address, String observation) {
@@ -42,12 +42,23 @@ public class Patient {
         this.observation = observation;
     }
 
-    public void setResponsible(Responsible responsible) {
-        this.responsible = responsible;
+    public List<Responsible> addResponsible(Responsible responsible) {
+        this.responsibles.add(responsible);
+        return Collections.unmodifiableList(responsibles);
+    }
+
+    public List<Responsible> addAllResponsible(List<Responsible> responsibles) {
+        this.responsibles.addAll(responsibles);
+        return Collections.unmodifiableList(responsibles);
     }
 
     public List<Contact> addContact(Contact contact) {
         this.contacts.add(contact);
+        return Collections.unmodifiableList(contacts);
+    }
+
+    public List<Contact> addContacts(List<Contact> contacts) {
+        this.contacts.addAll(contacts);
         return Collections.unmodifiableList(contacts);
     }
 

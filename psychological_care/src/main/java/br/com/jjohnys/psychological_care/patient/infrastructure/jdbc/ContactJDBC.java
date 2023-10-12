@@ -3,6 +3,7 @@ package br.com.jjohnys.psychological_care.patient.infrastructure.jdbc;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -18,11 +19,11 @@ public class ContactJDBC implements ContactRepository {
     JdbcTemplate jdbcTemplate;
 
     public int insertContact(Contact contact) {
-        return jdbcTemplate.update("insert into contact (id, name, email, telephone, patient_id, responsible_id) values (?, ?, ?, ?, ?, ?, ?)", contact.getId(), contact.getName(), contact.getEmail(), contact.getTelephone(), contact.getPatientId(), contact.getResponsibleId());        
+        return jdbcTemplate.update("insert into contact (id, email, telephone, patient_id, responsible_id) values (?, ?, ?, ?, ?)", genereteID(contact.getId()), contact.getEmail(), contact.getTelephone(), contact.getPatientId(), contact.getResponsibleId());        
     }
 
     public int updateContact(Contact contact) {
-        return jdbcTemplate.update("update contact set name  = ?, email = ?, telephone = ?, patient_id = ?, responsible_id = ? where id = ?", contact.getName(), contact.getEmail(), contact.getTelephone(), contact.getPatientId(), contact.getId(), contact.getResponsibleId());
+        return jdbcTemplate.update("update contact set email = ?, telephone = ?, patient_id = ?, responsible_id = ? where id = ?", contact.getEmail(), contact.getTelephone(), contact.getPatientId(), contact.getResponsibleId(), contact.getId());
     }
 
     public List<Contact> getContactById(String id) {
@@ -55,19 +56,22 @@ public class ContactJDBC implements ContactRepository {
         if(!rs.getString("patient_id").isBlank())
             return Contact.buildPatientContact(
                             rs.getString("id"),
-                            rs.getString("name"),
                             rs.getString("email"),
                             rs.getString("telephone"),
                             rs.getString("patient_id"));
         else {
             return Contact.buildResponsibleContact(
                             rs.getString("id"),
-                            rs.getString("name"),
                             rs.getString("email"),
                             rs.getString("telephone"),
                             rs.getString("responsible_id"));
         }                            
 
+    }
+
+    private String genereteID(String id) {
+        if(id == null || id.isBlank()) return UUID.randomUUID().toString();
+        return id;
     }
 
     

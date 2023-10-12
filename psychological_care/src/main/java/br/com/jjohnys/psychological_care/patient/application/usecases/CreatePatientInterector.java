@@ -21,15 +21,16 @@ public class CreatePatientInterector {
     private PatientRepository patientRepository;
 
     public void createPatient(PatientDTO patientDTO) {
-
-        Patient patient = new Patient(UUID.randomUUID().toString(), patientDTO.name(), patientDTO.cpf(), patientDTO.rg(), patientDTO.dateBirth(), patientDTO.price(),patientDTO.schooling(), Gender.getGenderEnum(patientDTO.gender()), patientDTO.address(), patientDTO.observation());
-        List<Contact> contactsPatient = patientDTO.getContacts().stream().map(dto -> Contact.buildPatientContact(UUID.randomUUID().toString(), dto.name(), dto.email(), dto.telephone(), dto.patientId())).collect(Collectors.toList());
+        String patientId = UUID.randomUUID().toString();
+        Patient patient = new Patient(patientId, patientDTO.name(), patientDTO.cpf(), patientDTO.rg(), patientDTO.dateBirth(), patientDTO.price(),patientDTO.schooling(), Gender.getGenderEnum(patientDTO.gender()), patientDTO.address(), patientDTO.observation());
+        List<Contact> contactsPatient = patientDTO.getContacts().stream().map(dto -> Contact.buildPatientContact(UUID.randomUUID().toString(), dto.email(), dto.telephone(), patientId)).collect(Collectors.toList());
         List<Contact> contactsResponsible = null;
         Responsible responsible = null;
-        if(patientDTO.responsible() != null)
-            contactsResponsible = patientDTO.responsible().getContacts().stream().map(dto -> Contact.buildResponsibleContact(UUID.randomUUID().toString(), dto.name(), dto.email(), dto.telephone(), dto.responsibleId())).collect(Collectors.toList());                
+        if(patientDTO.responsible() != null) {
+            String responsibleId = UUID.randomUUID().toString();
             responsible = new Responsible(null, patientDTO.responsible().name(), patientDTO.responsible().cpf(), patientDTO.responsible().rg(), patientDTO.responsible().dateBirth(), patientDTO.responsible().parentenge(), patient);
-
+            contactsResponsible = patientDTO.responsible().getContacts().stream().map(dto -> Contact.buildResponsibleContact(UUID.randomUUID().toString(), dto.email(), dto.telephone(), responsibleId)).collect(Collectors.toList());                
+        }
 
         patientRepository.insertPatient(patient, contactsPatient, responsible, contactsResponsible);        
         

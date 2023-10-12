@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
+import br.com.jjohnys.psychological_care.exceptions.BusinessExceptions;
 import br.com.jjohnys.psychological_care.patient.domain.Contact;
 import br.com.jjohnys.psychological_care.patient.domain.Patient;
 import br.com.jjohnys.psychological_care.patient.domain.Responsible;
@@ -27,28 +28,61 @@ public class PatientRepositoryImpl implements PatientRepository {
 
         patientJDBC.insertPatient(patient);
         contactJDBC.saveAll(contactsPatient);
-        if(responsible == null)
+        if(responsible != null) {
             responsibleJDBC.insertResponsible(responsible);
             contactJDBC.saveAll(contactsResponsible);
+        }
             
     }
 
     @Override
-    public int updatePatient(Patient patient) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updatePatient'");
+    public void updatePatient(Patient patient, List<Contact> contactsPatient, Responsible responsible, List<Contact> contactsResponsible) {
+        patientJDBC.updatePatient(patient);
+
+        contactsPatient.forEach(cp -> {
+            if(cp.getId().isBlank()) contactJDBC.updateContact(cp);
+            else contactJDBC.insertContact(cp);
+        });        
+        if(responsible == null) {
+            responsibleJDBC.updateResponsible(responsible);
+            contactsResponsible.forEach(cr -> {
+                if(cr.getId().isBlank()) contactJDBC.updateContact(cr);
+                else contactJDBC.insertContact(cr);
+            });
+        }
     }
 
     @Override
     public List<Patient> findPatientByName(String name) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findPatientByName'");
+        List<Patient> patients = patientJDBC.findPatientByName(name);
+        if(patients == null || patients.isEmpty()) 
+            throw new BusinessExceptions(String.format("Não econtrado algum paciente %s", name));
+        
+        return patients;
     }
 
     @Override
-    public Patient findPatientById(String id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findPatientById'");
+    public Patient findPatientById(String id) throws BusinessExceptions {
+
+        Patient patient = patientJDBC.findPatientById(id);
+        if(patient == null)
+            throw new BusinessExceptions(String.format("Não existe paciente com o ID %s", id));
+        List<Contact> contactsPatient = contactJDBC.getContactByPatientId(patient.getId());
+        if(contactsPatient == null)
+            throw new BusinessExceptions(String.format("Não existe contato para o paciente %s", patient.getName()));
+        patient.addContacts(contactsPatient);
+        List<Responsible> responsibles = responsibleJDBC.findResponsiblesByPatientId(id);
+        if(!responsibles.isEmpty()) {
+            responsibles.forEach(responsible -> {
+                List<Contact> contactsResponsible = contactJDBC.getContactByResponsibelId(patient.getId());
+                if(contactsResponsible == null) 
+                    throw new BusinessExceptions(String.format("Não existe contato para o paciente %s", patient.getName()));
+                responsible.addContacts(contactsResponsible);
+            });
+            patient.addAllResponsible(responsibles);
+        }
+
+        return patient;
     }
     
 }

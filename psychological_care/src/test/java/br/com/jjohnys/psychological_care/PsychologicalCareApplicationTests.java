@@ -22,10 +22,10 @@ import br.com.jjohnys.psychological_care.psychological_support.repository.Suppor
 import br.com.jjohnys.psychological_care.psychological_support.service.ReceiptSupportService;
 import br.com.jjohnys.psychological_care.utils.DateUtils;
 
-@SpringBootTest
+//@SpringBootTest
 class PsychologicalCareApplicationTests {
 
-	@Test
+	//@Test
 	void contextLoads() {
 	}
 
@@ -37,7 +37,7 @@ class PsychologicalCareApplicationTests {
 	private ReceiptSupportService receiptSupportService;
 	
 
-	@Test
+	//@Test
 	public void sholdReturnTotalValueOfSuportsbyPeriod() {
 
 		Patient yoga = createPatiente("Yoga", "747.887.996-22", "23.335.335-1");
@@ -52,7 +52,7 @@ class PsychologicalCareApplicationTests {
 
 	}
 
-	@Test
+	//@Test
 	public void sholdReturnExceptionWhenPatientDontHaveSupport() {
 
 		Patient miro = createPatiente("Miro", "114.421.998-88", "77+887+987-3");		

@@ -21,7 +21,7 @@ public class PatientJDBC{
 
     public int insertPatient(Patient patient) {
         return jdbcTemplate.update("insert into patient (id, name, cpf, rg, date_birth, price, schooling, gender, address, observation) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-        genereteID(patient.getId()), patient.getName(), patient.getCpf(), patient.getRg(), patient.getDateBirth(), patient.getPrice(), patient.getSchooling(), patient.getGender().getDescription(), patient.getAddress(), patient.getObservation());
+            genereteID(patient.getId()), patient.getName(), patient.getCpf(), patient.getRg(), patient.getDateBirth(), patient.getPrice(), patient.getSchooling(), patient.getGender().getDescription(), patient.getAddress(), patient.getObservation());
     }
 
     public int updatePatient(Patient patient) {

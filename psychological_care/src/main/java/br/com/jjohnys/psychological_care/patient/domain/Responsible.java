@@ -1,6 +1,7 @@
 package br.com.jjohnys.psychological_care.patient.domain;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -19,7 +20,7 @@ public class Responsible {
     private LocalDate dateBirth;
     private String parentege;
     private Patient patient;
-    private List<Contact> contacts;
+    private List<Contact> contacts = new ArrayList<Contact>();
 
     public Responsible(String id, String name, String cpf, String rg, LocalDate dateBirth, String parentege,
             Patient patient) {
@@ -34,6 +35,11 @@ public class Responsible {
 
     public List<Contact> addContact(Contact contact) {
         this.contacts.add(contact);
+        return Collections.unmodifiableList(contacts);
+    }
+
+    public List<Contact> addContacts(List<Contact> contacts) {
+        this.contacts.addAll(contacts);
         return Collections.unmodifiableList(contacts);
     }
 

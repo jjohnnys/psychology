@@ -1,11 +1,7 @@
 package br.com.jjohnys.psychological_care.patient.application.dto;
 
 public record ContactDTO (
-                String id, 
-                String name, 
+                String id,
                 String email, 
-                String telephone, 
-                String parentage, 
-                String patientId, 
-                String responsibleId) {
+                String telephone) {
 }

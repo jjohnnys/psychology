@@ -42,8 +42,7 @@ public class ResponsibleJDBC {
         String query = "select " +
                         " id, name, cpf, rg, date_birth, parentenge, patient_id " +
                         " from  " +
-                        " responsible , " +
-                        " patient p " +
+                        " responsible " +
                         " where " +
                         " patient_id = ? ";
       return jdbcTemplate.query(query, (rs, rowNum) -> createResponsible(rs), new Object[]{patientId});

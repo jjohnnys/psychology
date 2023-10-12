@@ -10,7 +10,7 @@ public interface PatientRepository {
 
     void insertPatient(Patient patient, List<Contact> contactsPatient, Responsible responsible, List<Contact> contactsResponsible);
 
-    int updatePatient(Patient patient);
+    void updatePatient(Patient patient, List<Contact> contactsPatient, Responsible responsible, List<Contact> contactsResponsible);
 
     List<Patient> findPatientByName(String name);
 
