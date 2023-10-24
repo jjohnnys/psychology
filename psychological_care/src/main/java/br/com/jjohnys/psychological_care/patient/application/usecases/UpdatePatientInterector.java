@@ -18,17 +18,16 @@ import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
-public class CreatePatientInterector {
-    
+public class UpdatePatientInterector {
+
     private PatientRepository patientRepository;
 
-    public void createPatient(PatientDTO patientDTO) {
+    public void updatePatient(PatientDTO patientDTO) {
 
         if(patientRepository.existisOtherPatientWithSameCPF(patientDTO.id(), patientDTO.cpf())) 
-            throw new BusinessExceptions(String.format("Ja existe o CPF: %s cadastrado", patientDTO.cpf()));
-        String patientId = UUID.randomUUID().toString();
-        Patient patient = new Patient(patientId, patientDTO.name(), patientDTO.cpf(), patientDTO.rg(), patientDTO.dateBirth(), patientDTO.price(),patientDTO.schooling(), Gender.getGenderEnum(patientDTO.gender()), patientDTO.address(), patientDTO.observation());
-        List<Contact> contactsPatient = patientDTO.getContactsDTO().stream().map(dto -> Contact.buildPatientContact(UUID.randomUUID().toString(), dto.email(), dto.telephone(), patientId)).collect(Collectors.toList());
+            throw new BusinessExceptions(String.format("Ja existe o CPF: %s cadastrado", patientDTO.cpf()));        
+        Patient patient = new Patient(patientDTO.id(), patientDTO.name(), patientDTO.cpf(), patientDTO.rg(), patientDTO.dateBirth(), patientDTO.price(),patientDTO.schooling(), Gender.getGenderEnum(patientDTO.gender()), patientDTO.address(), patientDTO.observation());
+        List<Contact> contactsPatient = patientDTO.getContactsDTO().stream().map(dto -> Contact.buildPatientContact(dto.id(), dto.email(), dto.telephone(), patientDTO.id())).collect(Collectors.toList());
         List<Contact> contactsResponsible = new ArrayList<Contact>();
         List<Responsible> responsibles = new ArrayList<Responsible>();
         if(patientDTO.responsiblesDTO() != null) patientDTO.responsiblesDTO().forEach(responsibleDTO -> {
@@ -36,15 +35,12 @@ public class CreatePatientInterector {
                 throw new BusinessExceptions(String.format("O CPF do responsavel nao podeser igual ao do paciente: %s", responsibleDTO.cpf()));
             if(patientRepository.existisOtherResponsibleWithSameCPF(patientDTO.id(), patientDTO.cpf())) 
                 throw new BusinessExceptions(String.format("Ja existe o CPF: %s cadastrado", responsibleDTO.cpf()));
-            String responsibleId = UUID.randomUUID().toString();
-            responsibles.add(new Responsible(responsibleId, responsibleDTO.name(), responsibleDTO.cpf(), responsibleDTO.rg(), responsibleDTO.dateBirth(), responsibleDTO.parentenge(), patient));
-            contactsResponsible.addAll(responsibleDTO.getContacts().stream().map(dto -> Contact.buildResponsibleContact(UUID.randomUUID().toString(), dto.email(), dto.telephone(), responsibleId)).collect(Collectors.toList()));                        
+            responsibles.add(new Responsible(responsibleDTO.id(), responsibleDTO.name(), responsibleDTO.cpf(), responsibleDTO.rg(), responsibleDTO.dateBirth(), responsibleDTO.parentenge(), patient));
+            contactsResponsible.addAll(responsibleDTO.getContacts().stream().map(dto -> Contact.buildResponsibleContact(dto.id(), dto.email(), dto.telephone(), responsibleDTO.id())).collect(Collectors.toList()));                        
         });        
-        patientRepository.insertPatient(patient, contactsPatient, responsibles, contactsResponsible);                
+        patientRepository.updatePatient(patient, contactsPatient, responsibles, contactsResponsible);   
+
+
     }
-
-    
-
-    
     
 }

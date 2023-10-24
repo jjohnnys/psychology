@@ -24,32 +24,34 @@ public class PatientRepositoryImpl implements PatientRepository {
     
 
     @Override
-    public void insertPatient(Patient patient, List<Contact> contactsPatient, Responsible responsible, List<Contact> contactsResponsible) {    
+    public void insertPatient(Patient patient, List<Contact> contactsPatient, List<Responsible> responsibles, List<Contact> contactsResponsible) {    
 
         patientJDBC.insertPatient(patient);
         contactJDBC.saveAll(contactsPatient);
-        if(responsible != null) {
+        if(responsibles != null) responsibles.forEach(responsible -> {            
             responsibleJDBC.insertResponsible(responsible);
-            contactJDBC.saveAll(contactsResponsible);
-        }
+            contactJDBC.saveAll(contactsResponsible);        
+        });
+        
             
     }
 
     @Override
-    public void updatePatient(Patient patient, List<Contact> contactsPatient, Responsible responsible, List<Contact> contactsResponsible) {
+    public void updatePatient(Patient patient, List<Contact> contactsPatient, List<Responsible> responsibles, List<Contact> contactsResponsible) {
         patientJDBC.updatePatient(patient);
 
         contactsPatient.forEach(cp -> {
-            if(cp.getId().isBlank()) contactJDBC.updateContact(cp);
+            if(!cp.getId().isBlank()) contactJDBC.updateContact(cp);
             else contactJDBC.insertContact(cp);
         });        
-        if(responsible == null) {
-            responsibleJDBC.updateResponsible(responsible);
+        if(responsibles != null) responsibles.forEach(responsible -> {
+            if(responsible.getId() != null && !responsible.getId().isBlank()) responsibleJDBC.updateResponsible(responsible);
+            else responsibleJDBC.insertResponsible(responsible);
             contactsResponsible.forEach(cr -> {
-                if(cr.getId().isBlank()) contactJDBC.updateContact(cr);
+                if(!cr.getId().isBlank()) contactJDBC.updateContact(cr);
                 else contactJDBC.insertContact(cr);
             });
-        }
+        });
     }
 
     @Override
@@ -63,26 +65,46 @@ public class PatientRepositoryImpl implements PatientRepository {
 
     @Override
     public Patient findPatientById(String id) throws BusinessExceptions {
+        return this.getFullPatiente(patientJDBC.findPatientById(id));        
+    }
 
-        Patient patient = patientJDBC.findPatientById(id);
+    @Override
+    public Patient findPatientByCpf(String cpf) throws BusinessExceptions {
+        return this.getFullPatiente(patientJDBC.findPatientByCPF(cpf));        
+    }
+
+    private Patient getFullPatiente(Patient patient) {
         if(patient == null)
-            throw new BusinessExceptions(String.format("Não existe paciente com o ID %s", id));
+            return null;
         List<Contact> contactsPatient = contactJDBC.getContactByPatientId(patient.getId());
         if(contactsPatient == null)
             throw new BusinessExceptions(String.format("Não existe contato para o paciente %s", patient.getName()));
         patient.addContacts(contactsPatient);
-        List<Responsible> responsibles = responsibleJDBC.findResponsiblesByPatientId(id);
+        List<Responsible> responsibles = responsibleJDBC.findResponsiblesByPatientId(patient.getId());
         if(!responsibles.isEmpty()) {
             responsibles.forEach(responsible -> {
-                List<Contact> contactsResponsible = contactJDBC.getContactByResponsibelId(patient.getId());
+                List<Contact> contactsResponsible = contactJDBC.getContactByResponsibelId(responsible.getId());
                 if(contactsResponsible == null) 
-                    throw new BusinessExceptions(String.format("Não existe contato para o paciente %s", patient.getName()));
+                    throw new BusinessExceptions(String.format("Não existe contato para o responsavel %s", responsible.getName()));
                 responsible.addContacts(contactsResponsible);
             });
             patient.addAllResponsible(responsibles);
         }
 
         return patient;
+
     }
+
+    @Override
+    public boolean existisOtherPatientWithSameCPF(String id, String cpf) {
+        return patientJDBC.existisOtherPatientWithSameCPF(id, cpf);
+    }
+
+    @Override
+    public boolean existisOtherResponsibleWithSameCPF(String id, String cpf) {
+        return responsibleJDBC.existisOtherResponsibleWithSameCPF(id, cpf);
+    }
+
+    
     
 }

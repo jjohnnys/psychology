@@ -25,7 +25,7 @@ public class Patient {
     private Gender gender;
     private String address;
     private String observation;
-    private List<Responsible> responsibles;
+    private List<Responsible> responsibles = new ArrayList<Responsible>();;
     private List<Contact> contacts = new ArrayList<Contact>();
 
     public Patient(String id, String name, String cpf, String rg, LocalDate dateBirth, Integer price, String schooling,

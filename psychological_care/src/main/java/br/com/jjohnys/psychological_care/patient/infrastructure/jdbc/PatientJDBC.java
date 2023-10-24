@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -40,9 +41,26 @@ public class PatientJDBC{
     }
 
     public Patient findPatientByCPF(String cpf) {
-        return jdbcTemplate.queryForObject("select * from patient where cpf = ?", (rs, rowNum) -> 
-            createPatient(rs), new Object[]{cpf});
+        try {            
+            return jdbcTemplate.queryForObject("select * from patient where cpf = ?", (rs, rowNum) -> createPatient(rs), new Object[]{cpf});
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
     }
+
+    public boolean existisOtherPatientWithSameCPF(String id, String cpf) {
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("select * from patient where ");
+        if(id != null && !id.isBlank()) sb.append("id <> '" + id + "' and ");            
+        sb.append("cpf = '" + cpf + "'");
+        try {            
+           return jdbcTemplate.queryForObject(sb.toString(), (rs, rowNum) -> createPatient(rs)) != null;
+        } catch (EmptyResultDataAccessException e) {
+            return false;
+        }
+    }
+
 
     private Patient createPatient(ResultSet rs) throws SQLException {
         return new Patient(

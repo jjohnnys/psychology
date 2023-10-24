@@ -53,7 +53,7 @@ public class ContactJDBC implements ContactRepository {
 
     private Contact createContact(ResultSet rs) throws SQLException {
 
-        if(!rs.getString("patient_id").isBlank())
+        if(rs.getString("patient_id") != null)
             return Contact.buildPatientContact(
                             rs.getString("id"),
                             rs.getString("email"),
