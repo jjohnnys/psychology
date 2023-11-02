@@ -8,6 +8,7 @@ import br.com.jjohnys.psychological_care.exceptions.BusinessExceptions;
 import br.com.jjohnys.psychological_care.patient.domain.Contact;
 import br.com.jjohnys.psychological_care.patient.domain.Patient;
 import br.com.jjohnys.psychological_care.patient.domain.Responsible;
+import br.com.jjohnys.psychological_care.patient.domain.enums.PatientStatusEnum;
 import br.com.jjohnys.psychological_care.patient.gateways.PatientRepository;
 import br.com.jjohnys.psychological_care.patient.infrastructure.jdbc.ContactJDBC;
 import br.com.jjohnys.psychological_care.patient.infrastructure.jdbc.PatientJDBC;
@@ -64,8 +65,13 @@ public class PatientRepositoryImpl implements PatientRepository {
     }
 
     @Override
-    public Patient findPatientById(String id) throws BusinessExceptions {
+    public Patient findFullPatientById(String id) throws BusinessExceptions {
         return this.getFullPatiente(patientJDBC.findPatientById(id));        
+    }
+
+    @Override
+    public Patient findPatientById(String id) throws BusinessExceptions {
+        return patientJDBC.findPatientById(id);        
     }
 
     @Override
@@ -104,6 +110,13 @@ public class PatientRepositoryImpl implements PatientRepository {
     public boolean existisOtherResponsibleWithSameCPF(String id, String cpf) {
         return responsibleJDBC.existisOtherResponsibleWithSameCPF(id, cpf);
     }
+
+    @Override
+    public int chengeStatusPatient(String patientId, PatientStatusEnum status) {        
+        return patientJDBC.chengeStatusPatient(patientId, status);
+    }
+
+    
 
     
     

@@ -2,9 +2,11 @@ package br.com.jjohnys.psychological_care.patient.gateways;
 
 import java.util.List;
 
+import br.com.jjohnys.psychological_care.exceptions.BusinessExceptions;
 import br.com.jjohnys.psychological_care.patient.domain.Contact;
 import br.com.jjohnys.psychological_care.patient.domain.Patient;
 import br.com.jjohnys.psychological_care.patient.domain.Responsible;
+import br.com.jjohnys.psychological_care.patient.domain.enums.PatientStatusEnum;
 
 public interface PatientRepository {
 
@@ -16,9 +18,13 @@ public interface PatientRepository {
 
     Patient findPatientById(String id); 
 
-    public Patient findPatientByCpf(String cpf);
-    
-    public boolean existisOtherPatientWithSameCPF(String id, String cpf);
+    Patient findFullPatientById(String id);
 
-    public boolean existisOtherResponsibleWithSameCPF(String id, String cpf);
+    Patient findPatientByCpf(String cpf);
+    
+    boolean existisOtherPatientWithSameCPF(String id, String cpf);
+
+    boolean existisOtherResponsibleWithSameCPF(String id, String cpf);
+
+    int chengeStatusPatient(String patientId, PatientStatusEnum status);
 }

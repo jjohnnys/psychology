@@ -2,6 +2,7 @@ package br.com.jjohnys.psychological_care;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,14 +12,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import br.com.jjohnys.psychological_care.exceptions.BusinessExceptions;
+import br.com.jjohnys.psychological_care.exceptions.PatientStatusException;
 import br.com.jjohnys.psychological_care.patient.application.dto.ContactDTO;
 import br.com.jjohnys.psychological_care.patient.application.dto.PatientDTO;
 import br.com.jjohnys.psychological_care.patient.application.usecases.CreatePatientInterector;
 import br.com.jjohnys.psychological_care.patient.application.usecases.UpdatePatientInterector;
+import br.com.jjohnys.psychological_care.patient.application.usecases.chenge_patient_status.ChangePacienteStatusInterector;
+import br.com.jjohnys.psychological_care.patient.application.usecases.chenge_patient_status.ChangePacienteStatusInterectorFactory;
 import br.com.jjohnys.psychological_care.patient.domain.Contact;
 import br.com.jjohnys.psychological_care.patient.domain.Patient;
 import br.com.jjohnys.psychological_care.patient.domain.Responsible;
-import br.com.jjohnys.psychological_care.patient.domain.enums.Gender;
+import br.com.jjohnys.psychological_care.patient.domain.enums.GenderEnum;
+import br.com.jjohnys.psychological_care.patient.domain.enums.PatientStatusEnum;
 import br.com.jjohnys.psychological_care.patient.gateways.PatientRepository;
 import br.com.jjohnys.psychological_care.utils.DateUtils;
 
@@ -31,13 +36,15 @@ public class PatienteUseCaseTest {
     private UpdatePatientInterector updatePatientInterector;
     @Autowired
     private PatientRepository patientRepository;
+    @Autowired
+    private ChangePacienteStatusInterectorFactory changePacienteStatusInterectorFactory;    
 
     @Test
     public void createPatientSuccess() {
       
         List<ContactDTO> contactsDTO = new ArrayList<ContactDTO>();
         contactsDTO.add(new ContactDTO(null, "ikki@mail.com", "85 98745"));
-        PatientDTO patientDTO = new PatientDTO(null, "Ikki", "985.698.497-22", "99.689.695-5", DateUtils.stringDateToLocalDate("1987-04-15"), 100, "PosGraduado", Gender.MALE.getDescription(), "Ilha dificil", null, "Muito forte", contactsDTO);       
+        PatientDTO patientDTO = new PatientDTO(null, "Ikki", "985.698.497-22", "99.689.695-5", DateUtils.stringDateToLocalDate("1987-04-15"), 100, "PosGraduado", GenderEnum.MALE.getDescription(), "Ilha dificil", null, PatientStatusEnum.IN_TREATMENT.getStatus(), "Muito forte", contactsDTO);       
         createPatientInterector.createPatient(patientDTO);
         Patient patient = patientRepository.findPatientByCpf("985.698.497-22");
 
@@ -50,12 +57,12 @@ public class PatienteUseCaseTest {
 
         List<ContactDTO> contactsDTO = new ArrayList<ContactDTO>();
         contactsDTO.add(new ContactDTO(null, "miro@mail.com", "11 9875478"));
-        PatientDTO patientDTO = new PatientDTO(null, "Miro", "777.887.888-11", "42.221.332-5", DateUtils.stringDateToLocalDate("1987-04-15"), 100, "PosGraduado", Gender.MALE.getDescription(), "Grecia", null, "Certeiro", contactsDTO);       
+        PatientDTO patientDTO = new PatientDTO(null, "Miro", "777.887.888-11", "42.221.332-5", DateUtils.stringDateToLocalDate("1987-04-15"), 100, "PosGraduado", GenderEnum.MALE.getDescription(), "Grecia", null, PatientStatusEnum.IN_TREATMENT.getStatus(), "Certeiro", contactsDTO);       
         createPatientInterector.createPatient(patientDTO);
 
         List<ContactDTO> contactsDuplicateCfp = new ArrayList<ContactDTO>();
         contactsDTO.add(new ContactDTO(null, "mu@mail.com", "11 8555254"));
-        PatientDTO patientDuplicateCfp = new PatientDTO(null, "Mu", "777.887.888-11", "55.288.647-2", DateUtils.stringDateToLocalDate("1987-04-15"), 100, "PosGraduado", Gender.MALE.getDescription(), "Grecia", null, "Certeiro", contactsDuplicateCfp);       
+        PatientDTO patientDuplicateCfp = new PatientDTO(null, "Mu", "777.887.888-11", "55.288.647-2", DateUtils.stringDateToLocalDate("1987-04-15"), 100, "PosGraduado", GenderEnum.MALE.getDescription(), "Grecia", null, PatientStatusEnum.IN_TREATMENT.getStatus(), "Certeiro", contactsDuplicateCfp);       
 
         assertThrows(BusinessExceptions.class, () -> createPatientInterector.createPatient(patientDuplicateCfp), "Ja existe o CPF: 777.887.888-11 cadastrado");
 
@@ -71,7 +78,7 @@ public class PatienteUseCaseTest {
         
         List<ContactDTO> contactsDTO = new ArrayList<ContactDTO>();
         contactsDTO.add(new ContactDTO(null, "aldebaram@mail.com", "13 56987"));
-        PatientDTO patientDTO = new PatientDTO(null, "Aldebaram", "453.222.333-44", "99.689.888-5", DateUtils.stringDateToLocalDate("1987-04-15"), 100, "PosGraduado", Gender.MALE.getDescription(), "Ilha dificil", responsiblesDTO, "Muito forte", contactsDTO);       
+        PatientDTO patientDTO = new PatientDTO(null, "Aldebaram", "453.222.333-44", "99.689.888-5", DateUtils.stringDateToLocalDate("1987-04-15"), 100, "PosGraduado", GenderEnum.MALE.getDescription(), "Ilha dificil", responsiblesDTO, PatientStatusEnum.IN_TREATMENT.getStatus(), "Muito forte", contactsDTO);       
         
         createPatientInterector.createPatient(patientDTO);
         Patient patient = patientRepository.findPatientByCpf("453.222.333-44");
@@ -105,7 +112,7 @@ public class PatienteUseCaseTest {
         ContactDTO contactDTO = new ContactDTO(contact.getId(), "seiyadepegasus@email.com", contact.getTelephone());
         List<ContactDTO> contactsDTO = new ArrayList<ContactDTO>();
         contactsDTO.add(contactDTO);
-        PatientDTO patientDTO = new PatientDTO(patient.getId(), patient.getName(), patient.getCpf(), patient.getRg(), patient.getDateBirth(), patient.getPrice(), "Lutador", patient.getGender().getDescription(), patient.getAddress(), responsibelsDTO, patient.getObservation(), contactsDTO);
+        PatientDTO patientDTO = new PatientDTO(patient.getId(), patient.getName(), patient.getCpf(), patient.getRg(), patient.getDateBirth(), patient.getPrice(), "Lutador", patient.getGender().getDescription(), patient.getAddress(), responsibelsDTO, PatientStatusEnum.IN_TREATMENT.getStatus(), patient.getObservation(), contactsDTO);
         
         updatePatientInterector.updatePatient(patientDTO);
 
@@ -122,6 +129,30 @@ public class PatienteUseCaseTest {
 
     }
 
-    
+    @Test
+    public void changeStatusPatient() {
+        String patientId = patientRepository.findPatientByCpf("879.597.845-98").getId();
+        PatientStatusEnum newStatus = PatientStatusEnum.TREATMENT_FINISHED;
+        ChangePacienteStatusInterector changePacienteStatus = changePacienteStatusInterectorFactory.create(newStatus);      
+        changePacienteStatus.change(patientId, newStatus.getStatus());
+        Patient patient = patientRepository.findPatientByCpf("879.597.845-98");
+        assertTrue(patient.getStatus() == PatientStatusEnum.TREATMENT_FINISHED, "Status alterado com sucesso");
+    }
+
+    @Test
+    public void ReturnsErrorWhenCompletingServiceWithoutBeingInProgress() {        
+        String patientId = patientRepository.findPatientByCpf("215.444.554-88").getId();
+        PatientStatusEnum newStatus = PatientStatusEnum.TREATMENT_FINISHED;  
+        ChangePacienteStatusInterector changePacienteStatus = changePacienteStatusInterectorFactory.create(newStatus);      
+        assertThrows(PatientStatusException.class, () -> changePacienteStatus.change(patientId, newStatus.getStatus()), "Nao pode finalizar atendimento de um paciente sem estar com o atendimento em andamento");
+    }
+
+    @Test
+    public void ReturnsErrorWhenInterruptedAFinishedService() {        
+        String patientId = patientRepository.findPatientByCpf("877.441.558-88").getId();
+        PatientStatusEnum newStatus = PatientStatusEnum.TREATMENT_STOPED; 
+        ChangePacienteStatusInterector changePacienteStatus = changePacienteStatusInterectorFactory.create(newStatus);             
+        assertThrows(PatientStatusException.class, () -> changePacienteStatus.change(patientId, newStatus.getStatus()), "Só é possivel interromper um tratamento quando o tratamento esta em andamento");
+    }
     
 }

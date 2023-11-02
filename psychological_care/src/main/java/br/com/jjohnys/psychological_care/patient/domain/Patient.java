@@ -5,7 +5,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import br.com.jjohnys.psychological_care.patient.domain.enums.Gender;
+import br.com.jjohnys.psychological_care.patient.domain.enums.GenderEnum;
+import br.com.jjohnys.psychological_care.patient.domain.enums.PatientStatusEnum;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
@@ -22,14 +23,15 @@ public class Patient {
     private LocalDate dateBirth;
     private Integer price;
     private String schooling;
-    private Gender gender;
+    private GenderEnum gender;
     private String address;
+    private PatientStatusEnum status;
     private String observation;
     private List<Responsible> responsibles = new ArrayList<Responsible>();;
     private List<Contact> contacts = new ArrayList<Contact>();
 
     public Patient(String id, String name, String cpf, String rg, LocalDate dateBirth, Integer price, String schooling,
-            Gender gender, String address, String observation) {
+            GenderEnum gender, String address, PatientStatusEnum status, String observation) {
         this.id = id;
         this.name = name;
         this.cpf = cpf;
@@ -39,6 +41,7 @@ public class Patient {
         this.schooling = schooling;
         this.gender = gender;
         this.address = address;
+        this.status = status;
         this.observation = observation;
     }
 

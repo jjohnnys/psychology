@@ -12,7 +12,8 @@ import br.com.jjohnys.psychological_care.patient.application.dto.PatientDTO;
 import br.com.jjohnys.psychological_care.patient.domain.Contact;
 import br.com.jjohnys.psychological_care.patient.domain.Patient;
 import br.com.jjohnys.psychological_care.patient.domain.Responsible;
-import br.com.jjohnys.psychological_care.patient.domain.enums.Gender;
+import br.com.jjohnys.psychological_care.patient.domain.enums.GenderEnum;
+import br.com.jjohnys.psychological_care.patient.domain.enums.PatientStatusEnum;
 import br.com.jjohnys.psychological_care.patient.gateways.PatientRepository;
 import lombok.AllArgsConstructor;
 
@@ -27,7 +28,7 @@ public class CreatePatientInterector {
         if(patientRepository.existisOtherPatientWithSameCPF(patientDTO.id(), patientDTO.cpf())) 
             throw new BusinessExceptions(String.format("Ja existe o CPF: %s cadastrado", patientDTO.cpf()));
         String patientId = UUID.randomUUID().toString();
-        Patient patient = new Patient(patientId, patientDTO.name(), patientDTO.cpf(), patientDTO.rg(), patientDTO.dateBirth(), patientDTO.price(),patientDTO.schooling(), Gender.getGenderEnum(patientDTO.gender()), patientDTO.address(), patientDTO.observation());
+        Patient patient = new Patient(patientId, patientDTO.name(), patientDTO.cpf(), patientDTO.rg(), patientDTO.dateBirth(), patientDTO.price(),patientDTO.schooling(), GenderEnum.getGenderEnum(patientDTO.gender()), patientDTO.address(), PatientStatusEnum.getStatusPatientEnum(patientDTO.status()), patientDTO.observation());
         List<Contact> contactsPatient = patientDTO.getContactsDTO().stream().map(dto -> Contact.buildPatientContact(UUID.randomUUID().toString(), dto.email(), dto.telephone(), patientId)).collect(Collectors.toList());
         List<Contact> contactsResponsible = new ArrayList<Contact>();
         List<Responsible> responsibles = new ArrayList<Responsible>();

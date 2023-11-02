@@ -12,7 +12,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import br.com.jjohnys.psychological_care.patient.domain.Patient;
-import br.com.jjohnys.psychological_care.patient.domain.enums.Gender;
+import br.com.jjohnys.psychological_care.patient.domain.enums.GenderEnum;
+import br.com.jjohnys.psychological_care.patient.domain.enums.PatientStatusEnum;
 
 @Repository
 public class PatientJDBC{
@@ -21,13 +22,13 @@ public class PatientJDBC{
     JdbcTemplate jdbcTemplate;
 
     public int insertPatient(Patient patient) {
-        return jdbcTemplate.update("insert into patient (id, name, cpf, rg, date_birth, price, schooling, gender, address, observation) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-            genereteID(patient.getId()), patient.getName(), patient.getCpf(), patient.getRg(), patient.getDateBirth(), patient.getPrice(), patient.getSchooling(), patient.getGender().getDescription(), patient.getAddress(), patient.getObservation());
+        return jdbcTemplate.update("insert into patient (id, name, cpf, rg, date_birth, price, schooling, gender, address, status, observation) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            genereteID(patient.getId()), patient.getName(), patient.getCpf(), patient.getRg(), patient.getDateBirth(), patient.getPrice(), patient.getSchooling(), patient.getGender().getDescription(), patient.getAddress(), patient.getStatus().getStatus(), patient.getObservation());
     }
 
     public int updatePatient(Patient patient) {
-        String update = "update patient set name = ?, cpf = ?, rg = ?, date_birth = ?, price = ?, schooling = ?, gender = ?, address = ?, observation = ? where id = ?";               
-        return jdbcTemplate.update(update, patient.getName(), patient.getCpf(), patient.getRg(), patient.getDateBirth(), patient.getPrice(),  patient.getSchooling(), patient.getGender().getDescription(), patient.getAddress(), patient.getObservation(), patient.getId());
+        String update = "update patient set name = ?, cpf = ?, rg = ?, date_birth = ?, price = ?, schooling = ?, gender = ?, address = ?, status = ?, observation = ? where id = ?";               
+        return jdbcTemplate.update(update, patient.getName(), patient.getCpf(), patient.getRg(), patient.getDateBirth(), patient.getPrice(),  patient.getSchooling(), patient.getGender().getDescription(), patient.getAddress(), patient.getStatus().getStatus(),  patient.getObservation(), patient.getId());
     }
 
     public List<Patient> findPatientByName(String name) {        
@@ -36,8 +37,11 @@ public class PatientJDBC{
     }
 
     public Patient findPatientById(String id) {
-        return jdbcTemplate.queryForObject("select * from patient where id = ?", (rs, rowNum) -> 
-            createPatient(rs), new Object[]{id});
+        try {
+            return jdbcTemplate.queryForObject("select * from patient where id = ?", (rs, rowNum) -> createPatient(rs), new Object[]{id});            
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
     }
 
     public Patient findPatientByCPF(String cpf) {
@@ -61,6 +65,10 @@ public class PatientJDBC{
         }
     }
 
+    public int chengeStatusPatient(String patientId, PatientStatusEnum status) {
+        return jdbcTemplate.update("update patient set status = ? where id = ?", status.getStatus(), patientId);
+    }
+
 
     private Patient createPatient(ResultSet rs) throws SQLException {
         return new Patient(
@@ -71,8 +79,9 @@ public class PatientJDBC{
                 (LocalDate.parse(rs.getString("date_birth"))),
                 (rs.getInt("price")),
                 rs.getString("schooling"),
-                Gender.getGenderEnum(rs.getString("gender")),
+                GenderEnum.getGenderEnum(rs.getString("gender")),
                 rs.getString("address"),
+                PatientStatusEnum.getStatusPatientEnum(rs.getString("status")),
                 rs.getString("observation")
             );
     }

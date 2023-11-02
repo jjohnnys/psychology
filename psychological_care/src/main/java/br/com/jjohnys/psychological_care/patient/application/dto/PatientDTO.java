@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import br.com.jjohnys.psychological_care.patient.application.dto.PatientDTO.ResponsibleDTO;
 import br.com.jjohnys.psychological_care.patient.domain.Patient;
 
 public record PatientDTO (
@@ -18,6 +19,7 @@ public record PatientDTO (
               String gender,
               String address,
               List<ResponsibleDTO> responsiblesDTO,
+              String status,
               String observation,
               List<ContactDTO> contactsDTO) {
     
@@ -35,7 +37,7 @@ public record PatientDTO (
                 new ResponsibleDTO(responsible.getId(), responsible.getName(), responsible.getCpf(), responsible.getRg(), responsible.getDateBirth(), responsible.getParentege(), 
                 responsible.getContacts().stream().map(contact -> new ContactDTO(contact.getId(), contact.getEmail(), contact.getTelephone())).collect(Collectors.toList()))).
                 collect(Collectors.toList()), 
-            patient.getObservation(), patient.getContacts().stream().map(contact -> new ContactDTO(contact.getId(), contact.getEmail(), contact.getTelephone())).collect(Collectors.toList()));
+            patient.getStatus().getStatus(), patient.getObservation(), patient.getContacts().stream().map(contact -> new ContactDTO(contact.getId(), contact.getEmail(), contact.getTelephone())).collect(Collectors.toList()));
     }
         
     public record ResponsibleDTO(String id, String name, String cpf, String rg, LocalDate dateBirth, String parentenge, List<ContactDTO> contacts) {
