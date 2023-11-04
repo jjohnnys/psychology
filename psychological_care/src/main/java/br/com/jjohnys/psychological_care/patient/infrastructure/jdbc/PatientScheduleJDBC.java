@@ -28,7 +28,7 @@ public class PatientScheduleJDBC {
 
     public int update(PatientSchedule patientSchedule) {
         String update = "update patient_schedule set day_of_Week = ?, times_of_month = ? , time_of_day = ? where patient_id = ?";               
-        return jdbcTemplate.update(update, patientSchedule.getDayOfWeek(), patientSchedule.getTimesOfMonth(), patientSchedule.getTime(), patientSchedule.getPatient().getId());
+        return jdbcTemplate.update(update, patientSchedule.getDayOfWeek().getDaysOfWeek(), patientSchedule.getTimesOfMonth(), patientSchedule.getTime(), patientSchedule.getPatient().getId());
     }
 
     public PatientSchedule getScheduleByPatienteId(String patientId) {
@@ -38,6 +38,16 @@ public class PatientScheduleJDBC {
         } catch (EmptyResultDataAccessException e) {
             return null;
         }
+    }
+
+    public PatientSchedule getScheduleByPatientePeriod(LocalTime timeIni, LocalTime timeFin, DaysOfWeekEnum dayOfWeek) {
+        String query = "select * from patient_schedule where time_of_day >= ? and time_of_day < ? and day_of_Week = ?";
+        try {            
+            return jdbcTemplate.queryForObject(query, (rs, rowNum) -> createPatientSchedule(rs), new Object[]{timeIni.toString(), timeFin.toString(), dayOfWeek.getDaysOfWeek()});
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+
     }
 
     private PatientSchedule createPatientSchedule(ResultSet rs) throws SQLException {

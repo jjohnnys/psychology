@@ -1,9 +1,12 @@
 package br.com.jjohnys.psychological_care.patient.gateways.impl;
 
+import java.time.LocalTime;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import br.com.jjohnys.psychological_care.patient.domain.PatientSchedule;
+import br.com.jjohnys.psychological_care.patient.domain.enums.DaysOfWeekEnum;
 import br.com.jjohnys.psychological_care.patient.gateways.PatientScheduleRepository;
 import br.com.jjohnys.psychological_care.patient.infrastructure.jdbc.PatientScheduleJDBC;
 
@@ -26,6 +29,11 @@ public class PatientScheduleRepositoryImpl implements PatientScheduleRepository 
     @Override
     public int update(PatientSchedule patientSchedule) {
         return patientScheduleJDBC.update(patientSchedule);
+    }
+
+    @Override
+    public PatientSchedule getScheduleByPatientePeriod(LocalTime timeIni, LocalTime timeFin, DaysOfWeekEnum dayOfWeek) {
+        return patientScheduleJDBC.getScheduleByPatientePeriod(timeIni, timeFin, dayOfWeek);
     }
     
 }

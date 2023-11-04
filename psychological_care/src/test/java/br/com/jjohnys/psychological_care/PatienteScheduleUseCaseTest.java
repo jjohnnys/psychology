@@ -2,6 +2,7 @@ package br.com.jjohnys.psychological_care;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Answers.valueOf;
 
 import java.time.LocalTime;
 
@@ -12,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import br.com.jjohnys.psychological_care.exceptions.BusinessExceptions;
 import br.com.jjohnys.psychological_care.patient.application.dto.PatientScheduleDTO;
 import br.com.jjohnys.psychological_care.patient.application.usecases.CreatePatientScheduleUseCaseInterector;
+import br.com.jjohnys.psychological_care.patient.application.usecases.UpdatePatientScheduleUseCaseInterector;
 import br.com.jjohnys.psychological_care.patient.domain.Patient;
 import br.com.jjohnys.psychological_care.patient.domain.PatientSchedule;
 import br.com.jjohnys.psychological_care.patient.domain.enums.DaysOfWeekEnum;
@@ -29,6 +31,8 @@ public class PatienteScheduleUseCaseTest {
     private PatientScheduleRepository patientScheduleRepository;
     @Autowired
     private CreatePatientScheduleUseCaseInterector createPatientScheduleUseCase;
+    @Autowired
+    private UpdatePatientScheduleUseCaseInterector updatePatientScheduleUseCase;
 
     @Test
     public void createPatienteSchedule() {
@@ -38,7 +42,7 @@ public class PatienteScheduleUseCaseTest {
         var time = LocalTime.of(10, 30, 0);
         Integer timesOfMonth = 4;        
         
-        PatientScheduleDTO patientScheduleDTO = new PatientScheduleDTO(patient.getId(), "Segunda-feira", timesOfMonth, "10:30:00");
+        PatientScheduleDTO patientScheduleDTO = new PatientScheduleDTO(patient.getId(), dayOfWeek.getDaysOfWeek(), timesOfMonth, "10:30:00");
         createPatientScheduleUseCase.create(patientScheduleDTO);
         
         PatientSchedule patientSchedule = patientScheduleRepository.getScheduleByPatienteId(patient.getId());
@@ -49,13 +53,52 @@ public class PatienteScheduleUseCaseTest {
     }
 
     @Test
-    public void returnErrorWithInvalidPatiente() {
+    public void updatePatienteSchedule() {
+
+        Patient patient = patientRepository.findPatientById("paciente_2");
+        DaysOfWeekEnum dayOfWeek = DaysOfWeekEnum.WEDNESDAY;
+        var time = LocalTime.of(10, 30, 0);
+        Integer timesOfMonth = 4;        
+        
+        PatientScheduleDTO patientScheduleDTO = new PatientScheduleDTO(patient.getId(), dayOfWeek.getDaysOfWeek(), timesOfMonth, "10:30:00");
+        updatePatientScheduleUseCase.update(patientScheduleDTO);
+        
+        PatientSchedule patientSchedule = patientScheduleRepository.getScheduleByPatienteId(patient.getId());
+        assertEquals(dayOfWeek, patientSchedule.getDayOfWeek());
+        assertEquals(timesOfMonth, patientSchedule.getTimesOfMonth());
+        assertEquals(time, patientSchedule.getTime());
+
+    }    
+
+    @Test
+    public void sholdReturnErrorWithInvalidPatiente() {
 
         Patient patient = new Patient("invalid_patient", "Invalid Patient", "111.587.965.88", "55.552.333-4", DateUtils.stringDateToLocalDate("2000-04-07"), 100, "Nao estoudou", null, "Qualquer lugar", PatientStatusEnum.IN_TREATMENT, "Nao existe");        
         Integer timesOfMonth = 4;
         PatientScheduleDTO patientScheduleDTO = new PatientScheduleDTO(patient.getId(), "Segunda-feira", timesOfMonth, "10:30:00");
-        assertThrows(BusinessExceptions.class, () ->  createPatientScheduleUseCase.create(patientScheduleDTO), "Paciente nao cadastrado");
+        assertThrows(BusinessExceptions.class, () -> createPatientScheduleUseCase.create(patientScheduleDTO), "Paciente nao cadastrado");
 
     }
+
+    @Test
+    public void shouldReturnErrorWhenCreatingConflictingAgent() {
+        Patient patient = patientRepository.findPatientById("paciente_4");
+        DaysOfWeekEnum dayOfWeek = DaysOfWeekEnum.TUESDAY;
+        var time = LocalTime.of(10, 30, 0);
+        Integer timesOfMonth = 4;
+        PatientScheduleDTO patientScheduleDTO = new PatientScheduleDTO(patient.getId(), dayOfWeek.getDaysOfWeek(), timesOfMonth, time.toString());
+        assertThrows(BusinessExceptions.class, () -> createPatientScheduleUseCase.create(patientScheduleDTO), String.format("O paciente %s, ja esta no horario das %s as %s de %s", patient.getName(), time, time.plusHours(1), dayOfWeek.getDaysOfWeek()));
+    }
+
+    @Test
+    public void shouldReturnErrorWhenPatienHaveBeenSchedule() {
+        Patient patient = patientRepository.findPatientById("paciente_2");
+        DaysOfWeekEnum dayOfWeek = DaysOfWeekEnum.FRIDAY;
+        var time = LocalTime.of(10, 30, 0);
+        Integer timesOfMonth = 4;
+        PatientScheduleDTO patientScheduleDTO = new PatientScheduleDTO(patient.getId(), dayOfWeek.getDaysOfWeek(), timesOfMonth, time.toString());
+        assertThrows(BusinessExceptions.class, () -> createPatientScheduleUseCase.create(patientScheduleDTO), String.format("Ja existe agente para o paciente %s", patient.getName()));
+    }
+    
     
 }

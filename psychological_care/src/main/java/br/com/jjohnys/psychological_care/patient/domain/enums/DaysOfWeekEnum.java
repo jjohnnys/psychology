@@ -8,7 +8,7 @@ public enum DaysOfWeekEnum {
 
     SUNDAY("Domingo"),
     MONDAY("Segunda-feira"),
-    TUESDAY("Terça-feira"),
+    TUESDAY("Terca-feira"),
     WEDNESDAY("Quarta-feira"),
     THURSDAY("Quinta-feira"),
     FRIDAY("Sexta-feira"),
