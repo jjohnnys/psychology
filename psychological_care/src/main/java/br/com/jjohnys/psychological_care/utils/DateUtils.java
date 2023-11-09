@@ -21,6 +21,11 @@ public class DateUtils {
         return dateTime.format(formatter);
     }
 
+    public static String localDateToString(LocalDate date) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return date.format(formatter);
+    }
+
     public static String localDateTimeToStringTime(LocalDateTime dateTime) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH mm");
         return dateTime.format(formatter);

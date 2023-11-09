@@ -24,6 +24,20 @@ public enum DaysOfWeekEnum {
         return daysOfWeek;
     }
 
+    public int getDayOfWeek() {
+
+         return switch(this) {
+            case SUNDAY -> 1;
+            case MONDAY -> 2;
+            case TUESDAY -> 3;
+            case WEDNESDAY -> 4;
+            case THURSDAY -> 5;
+            case FRIDAY -> 6;
+            case SATURDAY -> 7;
+            default -> 0;
+         };
+    }
+
     public static DaysOfWeekEnum getDaysOfWeekEnum(String daysOfWeek) {
         return Arrays.asList(DaysOfWeekEnum.values()).stream().
             filter(v -> v.getDaysOfWeek().equalsIgnoreCase(daysOfWeek)).findFirst().
