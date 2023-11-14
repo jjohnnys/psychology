@@ -22,13 +22,13 @@ public class PatientScheduleJDBC {
     
 
     public int insert(PatientSchedule patientSchedule) {
-        return jdbcTemplate.update("insert into patient_schedule (patient_id, day_of_Week, times_of_month, time_of_day) values (?, ?, ?, ?)", 
-        patientSchedule.getPatient().getId(), patientSchedule.getDayOfWeek().getDaysOfWeek(), patientSchedule.getTimesOfMonth(), patientSchedule.getTime());
+        return jdbcTemplate.update("insert into patient_schedule (patient_id, day_of_Week, times_of_month, time_of_day, type_week) values (?, ?, ?, ?, ?)", 
+        patientSchedule.getPatient().getId(), patientSchedule.getDayOfWeek().getDaysOfWeek(), patientSchedule.getTimesOfMonth(), patientSchedule.getTime(), patientSchedule.getTypeWeek().getTypeWeek());
     }
 
     public int update(PatientSchedule patientSchedule) {
-        String update = "update patient_schedule set day_of_Week = ?, times_of_month = ? , time_of_day = ? where patient_id = ?";               
-        return jdbcTemplate.update(update, patientSchedule.getDayOfWeek().getDaysOfWeek(), patientSchedule.getTimesOfMonth(), patientSchedule.getTime(), patientSchedule.getPatient().getId());
+        String update = "update patient_schedule set day_of_Week = ?, times_of_month = ? , time_of_day = ?, type_week = ? where patient_id = ?";               
+        return jdbcTemplate.update(update, patientSchedule.getDayOfWeek().getDaysOfWeek(), patientSchedule.getTimesOfMonth(), patientSchedule.getTime(), patientSchedule.getTypeWeek().getTypeWeek(), patientSchedule.getPatient().getId());
     }
 
     public PatientSchedule getScheduleByPatienteId(String patientId) {
@@ -40,10 +40,10 @@ public class PatientScheduleJDBC {
         }
     }
 
-    public PatientSchedule getScheduleByPatientePeriod(LocalTime timeIni, LocalTime timeFin, DaysOfWeekEnum dayOfWeek) {
-        String query = "select * from patient_schedule where time_of_day >= ? and time_of_day < ? and day_of_Week = ?";
+    public PatientSchedule getScheduleByPatientePeriod(LocalTime timeIni, LocalTime timeFin, DaysOfWeekEnum dayOfWeek, PatientSchedule.TypeWeekEnum typeWeek) {
+        String query = "select * from patient_schedule where time_of_day >= ? and time_of_day < ? and day_of_Week = ? and type_week = ?";
         try {            
-            return jdbcTemplate.queryForObject(query, (rs, rowNum) -> createPatientSchedule(rs), new Object[]{timeIni.toString(), timeFin.toString(), dayOfWeek.getDaysOfWeek()});
+            return jdbcTemplate.queryForObject(query, (rs, rowNum) -> createPatientSchedule(rs), new Object[]{timeIni.toString(), timeFin.toString(), dayOfWeek.getDaysOfWeek(), typeWeek.getTypeWeek()});
         } catch (EmptyResultDataAccessException e) {
             return null;
         }
@@ -55,7 +55,8 @@ public class PatientScheduleJDBC {
                    patientJDBC.findPatientById(rs.getString("patient_id")) , 
                    DaysOfWeekEnum.getDaysOfWeekEnum(rs.getString("day_of_Week")),
                    rs.getInt("times_of_month"),
-                   LocalTime.parse(rs.getString("time_of_day")));
+                   LocalTime.parse(rs.getString("time_of_day")),
+                   PatientSchedule.TypeWeekEnum.getTypeWeekEnum(rs.getString("type_week")));
     }
     
 }

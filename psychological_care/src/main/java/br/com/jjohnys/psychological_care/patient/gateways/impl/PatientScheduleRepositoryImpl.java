@@ -32,8 +32,8 @@ public class PatientScheduleRepositoryImpl implements PatientScheduleRepository 
     }
 
     @Override
-    public PatientSchedule getScheduleByPatientePeriod(LocalTime timeIni, LocalTime timeFin, DaysOfWeekEnum dayOfWeek) {
-        return patientScheduleJDBC.getScheduleByPatientePeriod(timeIni, timeFin, dayOfWeek);
+    public PatientSchedule getScheduleByPatientePeriod(LocalTime timeIni, LocalTime timeFin, DaysOfWeekEnum dayOfWeek, PatientSchedule.TypeWeekEnum typeWeek) {
+        return patientScheduleJDBC.getScheduleByPatientePeriod(timeIni, timeFin, dayOfWeek, typeWeek);
     }
     
 }

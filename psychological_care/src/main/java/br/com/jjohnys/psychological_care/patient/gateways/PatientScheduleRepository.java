@@ -10,6 +10,6 @@ public interface PatientScheduleRepository {
     int insert(PatientSchedule patientSchedule);
     PatientSchedule getScheduleByPatienteId(String patient_id);
     int update(PatientSchedule patientSchedule);
-    PatientSchedule getScheduleByPatientePeriod(LocalTime timeIni, LocalTime timeFin, DaysOfWeekEnum dayOfWeek);
+    PatientSchedule getScheduleByPatientePeriod(LocalTime timeIni, LocalTime timeFin, DaysOfWeekEnum dayOfWeek, PatientSchedule.TypeWeekEnum typeWeek);
     
 }

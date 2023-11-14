@@ -15,12 +15,19 @@ public class MonthlyScheduleServiceTest {
     private MonthlyScheduleService monthlyScheduleService;
 
     @Test
-    public void showMonthlySchedule() {
+    public void showMonthlyScheduleOfPatienteWithAllWeek() {
         String[] days = monthlyScheduleService.getDays("paciente_2", 2023, 10);
         assertEquals("2023-11-07", days[0]);
-        assertEquals("2023-11-14", days[1]);
-        assertEquals("2023-11-21", days[2]);
-        assertEquals("2023-11-28", days[3]);        
+        assertEquals("2023-11-21", days[1]);        
+    }
+
+    @Test
+    public void showMonthlyScheduleOfPatienteWithPairWeek() {
+        String[] days = monthlyScheduleService.getDays("paciente_5", 2023, 10);
+        assertEquals("2023-11-03", days[0]);
+        assertEquals("2023-11-10", days[1]);
+        assertEquals("2023-11-17", days[2]);
+        assertEquals("2023-11-24", days[3]);        
     }
     
 }

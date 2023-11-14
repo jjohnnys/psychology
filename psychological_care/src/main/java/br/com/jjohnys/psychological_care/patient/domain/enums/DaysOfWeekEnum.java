@@ -24,7 +24,7 @@ public enum DaysOfWeekEnum {
         return daysOfWeek;
     }
 
-    public int getDayOfWeek() {
+    public int getNumber() {
 
          return switch(this) {
             case SUNDAY -> 1;
