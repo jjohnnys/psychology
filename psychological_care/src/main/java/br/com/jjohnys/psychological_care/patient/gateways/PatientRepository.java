@@ -26,5 +26,5 @@ public interface PatientRepository {
 
     boolean existisOtherResponsibleWithSameCPF(String id, String cpf);
 
-    int chengeStatusPatient(String patientId, PatientStatusEnum status);
+    int changeStatusPatient(String patientId, PatientStatusEnum status);
 }

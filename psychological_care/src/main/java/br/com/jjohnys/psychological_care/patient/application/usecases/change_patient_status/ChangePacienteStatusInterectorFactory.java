@@ -1,4 +1,4 @@
-package br.com.jjohnys.psychological_care.patient.application.usecases.chenge_patient_status;
+package br.com.jjohnys.psychological_care.patient.application.usecases.change_patient_status;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

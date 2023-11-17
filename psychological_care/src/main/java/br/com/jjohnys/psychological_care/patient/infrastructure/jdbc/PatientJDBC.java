@@ -65,7 +65,7 @@ public class PatientJDBC{
         }
     }
 
-    public int chengeStatusPatient(String patientId, PatientStatusEnum status) {
+    public int changeStatusPatient(String patientId, PatientStatusEnum status) {
         return jdbcTemplate.update("update patient set status = ? where id = ?", status.getStatus(), patientId);
     }
 

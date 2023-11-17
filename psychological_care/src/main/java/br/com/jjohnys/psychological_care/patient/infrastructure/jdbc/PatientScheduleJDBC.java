@@ -31,6 +31,11 @@ public class PatientScheduleJDBC {
         return jdbcTemplate.update(update, patientSchedule.getDayOfWeek().getDaysOfWeek(), patientSchedule.getTimesOfMonth(), patientSchedule.getTime(), patientSchedule.getTypeWeek().getTypeWeek(), patientSchedule.getPatient().getId());
     }
 
+    public int deleteByPatientId(String patientId) {
+        String delete = "delete from patient_schedule where patient_id = ?";               
+        return jdbcTemplate.update(delete, patientId);
+    }
+
     public PatientSchedule getScheduleByPatienteId(String patientId) {
         String query = "select * from patient_schedule where patient_id = ?";
         try {            

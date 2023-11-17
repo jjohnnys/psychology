@@ -112,8 +112,8 @@ public class PatientRepositoryImpl implements PatientRepository {
     }
 
     @Override
-    public int chengeStatusPatient(String patientId, PatientStatusEnum status) {        
-        return patientJDBC.chengeStatusPatient(patientId, status);
+    public int changeStatusPatient(String patientId, PatientStatusEnum status) {        
+        return patientJDBC.changeStatusPatient(patientId, status);
     }
 
     

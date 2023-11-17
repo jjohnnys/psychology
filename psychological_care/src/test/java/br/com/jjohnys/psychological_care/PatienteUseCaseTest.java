@@ -1,9 +1,11 @@
 package br.com.jjohnys.psychological_care;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,16 +17,21 @@ import br.com.jjohnys.psychological_care.exceptions.BusinessExceptions;
 import br.com.jjohnys.psychological_care.exceptions.PatientStatusException;
 import br.com.jjohnys.psychological_care.patient.application.dto.ContactDTO;
 import br.com.jjohnys.psychological_care.patient.application.dto.PatientDTO;
+import br.com.jjohnys.psychological_care.patient.application.dto.PatientScheduleDTO;
 import br.com.jjohnys.psychological_care.patient.application.usecases.CreatePatientInterector;
+import br.com.jjohnys.psychological_care.patient.application.usecases.CreatePatientScheduleUseCaseInterector;
 import br.com.jjohnys.psychological_care.patient.application.usecases.UpdatePatientInterector;
-import br.com.jjohnys.psychological_care.patient.application.usecases.chenge_patient_status.ChangePacienteStatusInterector;
-import br.com.jjohnys.psychological_care.patient.application.usecases.chenge_patient_status.ChangePacienteStatusInterectorFactory;
+import br.com.jjohnys.psychological_care.patient.application.usecases.change_patient_status.ChangePacienteStatusInterector;
+import br.com.jjohnys.psychological_care.patient.application.usecases.change_patient_status.ChangePacienteStatusInterectorFactory;
 import br.com.jjohnys.psychological_care.patient.domain.Contact;
 import br.com.jjohnys.psychological_care.patient.domain.Patient;
+import br.com.jjohnys.psychological_care.patient.domain.PatientSchedule;
 import br.com.jjohnys.psychological_care.patient.domain.Responsible;
+import br.com.jjohnys.psychological_care.patient.domain.enums.DaysOfWeekEnum;
 import br.com.jjohnys.psychological_care.patient.domain.enums.GenderEnum;
 import br.com.jjohnys.psychological_care.patient.domain.enums.PatientStatusEnum;
 import br.com.jjohnys.psychological_care.patient.gateways.PatientRepository;
+import br.com.jjohnys.psychological_care.patient.gateways.PatientScheduleRepository;
 import br.com.jjohnys.psychological_care.utils.DateUtils;
 
 @SpringBootTest
@@ -37,7 +44,12 @@ public class PatienteUseCaseTest {
     @Autowired
     private PatientRepository patientRepository;
     @Autowired
-    private ChangePacienteStatusInterectorFactory changePacienteStatusInterectorFactory;    
+    private ChangePacienteStatusInterectorFactory changePacienteStatusInterectorFactory;   
+    @Autowired
+    private CreatePatientScheduleUseCaseInterector createPatientScheduleUseCase;
+    @Autowired 
+    PatientScheduleRepository patientScheduleRepository;
+    
 
     @Test
     public void createPatientSuccess() {
@@ -134,9 +146,29 @@ public class PatienteUseCaseTest {
         String patientId = patientRepository.findPatientByCpf("879.597.845-98").getId();
         PatientStatusEnum newStatus = PatientStatusEnum.TREATMENT_FINISHED;
         ChangePacienteStatusInterector changePacienteStatus = changePacienteStatusInterectorFactory.create(newStatus);      
-        changePacienteStatus.change(patientId, newStatus.getStatus());
+        changePacienteStatus.execute(patientId, newStatus.getStatus());
         Patient patient = patientRepository.findPatientByCpf("879.597.845-98");
         assertTrue(patient.getStatus() == PatientStatusEnum.TREATMENT_FINISHED, "Status alterado com sucesso");
+    }
+
+    @Test
+    public void dasablePatient() {
+        List<ContactDTO> contactsDTO = new ArrayList<ContactDTO>();
+        contactsDTO.add(new ContactDTO(null, "mu@mail.com", "85 98745"));
+        PatientDTO patientDTO = new PatientDTO(null, "Mu", "445.225.112-21", "88.551.362-7", DateUtils.stringDateToLocalDate("1987-04-15"), 100, "PosGraduado", GenderEnum.MALE.getDescription(), "Ilha dificil", null, PatientStatusEnum.IN_TREATMENT.getStatus(), "Sereno", contactsDTO);       
+        createPatientInterector.createPatient(patientDTO);
+        Patient patient = patientRepository.findPatientByCpf("445.225.112-21");
+        DaysOfWeekEnum dayOfWeek = DaysOfWeekEnum.SATURDAY;
+        Integer timesOfMonth = 4;        
+        
+        PatientScheduleDTO patientScheduleDTO = new PatientScheduleDTO(patient.getId(), dayOfWeek.getDaysOfWeek(), timesOfMonth, "10:30:00", PatientSchedule.TypeWeekEnum.PAIR.getTypeWeek());
+        createPatientScheduleUseCase.create(patientScheduleDTO);
+        PatientStatusEnum newStatus = PatientStatusEnum.TREATMENT_STOPED;
+        ChangePacienteStatusInterector changePacienteStatus = changePacienteStatusInterectorFactory.create(newStatus);      
+        changePacienteStatus.execute(patient.getId(), newStatus.getStatus());
+        PatientSchedule patientSchedule = patientScheduleRepository.getScheduleByPatienteId(patient.getId());
+        assertNull(patientSchedule);
+
     }
 
     @Test
@@ -144,7 +176,7 @@ public class PatienteUseCaseTest {
         String patientId = patientRepository.findPatientByCpf("215.444.554-88").getId();
         PatientStatusEnum newStatus = PatientStatusEnum.TREATMENT_FINISHED;  
         ChangePacienteStatusInterector changePacienteStatus = changePacienteStatusInterectorFactory.create(newStatus);      
-        assertThrows(PatientStatusException.class, () -> changePacienteStatus.change(patientId, newStatus.getStatus()), "Nao pode finalizar atendimento de um paciente sem estar com o atendimento em andamento");
+        assertThrows(PatientStatusException.class, () -> changePacienteStatus.execute(patientId, newStatus.getStatus()), "Nao pode finalizar atendimento de um paciente sem estar com o atendimento em andamento");
     }
 
     @Test
@@ -152,7 +184,7 @@ public class PatienteUseCaseTest {
         String patientId = patientRepository.findPatientByCpf("877.441.558-88").getId();
         PatientStatusEnum newStatus = PatientStatusEnum.TREATMENT_STOPED; 
         ChangePacienteStatusInterector changePacienteStatus = changePacienteStatusInterectorFactory.create(newStatus);             
-        assertThrows(PatientStatusException.class, () -> changePacienteStatus.change(patientId, newStatus.getStatus()), "Só é possivel interromper um tratamento quando o tratamento esta em andamento");
+        assertThrows(PatientStatusException.class, () -> changePacienteStatus.execute(patientId, newStatus.getStatus()), "Só é possivel interromper um tratamento quando o tratamento esta em andamento");
     }
     
 }

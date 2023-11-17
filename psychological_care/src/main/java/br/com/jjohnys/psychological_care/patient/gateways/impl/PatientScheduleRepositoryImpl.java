@@ -30,6 +30,9 @@ public class PatientScheduleRepositoryImpl implements PatientScheduleRepository 
     public int update(PatientSchedule patientSchedule) {
         return patientScheduleJDBC.update(patientSchedule);
     }
+    public int deleteByPatientId(String patientId) {
+        return patientScheduleJDBC.deleteByPatientId(patientId);
+    }
 
     @Override
     public PatientSchedule getScheduleByPatientePeriod(LocalTime timeIni, LocalTime timeFin, DaysOfWeekEnum dayOfWeek, PatientSchedule.TypeWeekEnum typeWeek) {
