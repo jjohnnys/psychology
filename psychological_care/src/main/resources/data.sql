@@ -2,7 +2,7 @@ drop table if exists contact;
 drop table if exists responsible;
 drop table if exists patient_schedule;
 drop table if exists patient;
-drop table if exists support;
+drop table if exists attendance;
 
 create table patient (
 	id varchar(255) not null,
@@ -42,7 +42,7 @@ create table contact(
     foreign key (responsible_id) references responsible (id)
 ) engine=InnoDB;
 
-create table support (
+create table attendance (
     id varchar(255) not null,
     patient_id varchar(255) not null,
     date_suport datetime not null,
@@ -74,4 +74,3 @@ insert into contact (id, email, telephone, patient_id, responsible_id) values ("
 
 insert into patient_schedule (patient_id, day_of_Week, times_of_month, time_of_day, type_week) values ('paciente_2', 'Terca-feira', 2, '10:30:00', 'par');
 insert into patient_schedule (patient_id, day_of_Week, times_of_month, time_of_day, type_week) values ('paciente_5', 'Sexta-feira', 4, '10:30:00', 'todas');
-

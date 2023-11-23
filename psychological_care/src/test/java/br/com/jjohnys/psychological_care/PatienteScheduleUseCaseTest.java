@@ -10,15 +10,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import br.com.jjohnys.psychological_care.exceptions.BusinessExceptions;
-import br.com.jjohnys.psychological_care.patient.application.dto.PatientScheduleDTO;
-import br.com.jjohnys.psychological_care.patient.application.usecases.CreatePatientScheduleUseCaseInterector;
-import br.com.jjohnys.psychological_care.patient.application.usecases.UpdatePatientScheduleUseCaseInterector;
-import br.com.jjohnys.psychological_care.patient.domain.Patient;
-import br.com.jjohnys.psychological_care.patient.domain.PatientSchedule;
-import br.com.jjohnys.psychological_care.patient.domain.enums.DaysOfWeekEnum;
-import br.com.jjohnys.psychological_care.patient.domain.enums.PatientStatusEnum;
-import br.com.jjohnys.psychological_care.patient.gateways.PatientRepository;
-import br.com.jjohnys.psychological_care.patient.gateways.PatientScheduleRepository;
+import br.com.jjohnys.psychological_care.psychological_support.application.dto.PatientScheduleDTO;
+import br.com.jjohnys.psychological_care.psychological_support.application.usecases.CreatePatientScheduleUseCaseInterector;
+import br.com.jjohnys.psychological_care.psychological_support.application.usecases.UpdatePatientScheduleUseCaseInterector;
+import br.com.jjohnys.psychological_care.psychological_support.domain.Patient;
+import br.com.jjohnys.psychological_care.psychological_support.domain.PatientSchedule;
+import br.com.jjohnys.psychological_care.psychological_support.domain.enums.DaysOfWeekEnum;
+import br.com.jjohnys.psychological_care.psychological_support.domain.enums.PatientStatusEnum;
+import br.com.jjohnys.psychological_care.psychological_support.gateways.PatientRepository;
+import br.com.jjohnys.psychological_care.psychological_support.gateways.PatientScheduleRepository;
 import br.com.jjohnys.psychological_care.utils.DateUtils;
 
 @SpringBootTest

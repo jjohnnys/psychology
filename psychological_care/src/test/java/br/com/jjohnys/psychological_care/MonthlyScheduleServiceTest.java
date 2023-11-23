@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import br.com.jjohnys.psychological_care.patient.application.service.MonthlyScheduleService;
+import br.com.jjohnys.psychological_care.psychological_support.application.service.MonthlyScheduleService;
 
 @SpringBootTest
 public class MonthlyScheduleServiceTest {
