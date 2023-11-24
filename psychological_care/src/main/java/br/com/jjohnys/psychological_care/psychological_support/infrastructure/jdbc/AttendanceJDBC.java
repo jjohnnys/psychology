@@ -7,13 +7,16 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import br.com.jjohnys.psychological_care.psychological_support.domain.Attendance;
 import br.com.jjohnys.psychological_care.psychological_support.gateways.AttendanceRepository;
+import br.com.jjohnys.psychological_care.utils.DateUtils;
 
-@Component
+@Repository
 public class AttendanceJDBC implements AttendanceRepository {
 
     @Autowired
@@ -40,7 +43,20 @@ public class AttendanceJDBC implements AttendanceRepository {
 
     public List<Attendance> getAttendanceByDate(LocalDate date) {
         String query = "select * from attendance where DATE(date_suport) = '" + date + "'";
-        return jdbcTemplate.query(query, (rs, rowNum) -> createAttendance(rs));
+        try {
+            return jdbcTemplate.query(query, (rs, rowNum) -> createAttendance(rs));            
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    } 
+
+    public Attendance getAttendanceByDateTime(LocalDateTime datetime) {
+        String query = "select * from attendance where date_suport =  ? ";
+        try {
+            return jdbcTemplate.queryForObject(query, (rs, rowNum) -> createAttendance(rs), new Object[]{datetime});            
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
     } 
 
     public List<Attendance> getAttendanceByPatient(String namePatiente) {
@@ -56,13 +72,8 @@ public class AttendanceJDBC implements AttendanceRepository {
     private Attendance createAttendance(ResultSet rs) throws SQLException {
         return new Attendance(rs.getString("id"), 
             patientJDBC.findPatientById(rs.getString("patient_id")), 
-            stringToLocaldateTime(rs.getString("date_suport")), 
+            DateUtils.stringDateToLocalDateTime(rs.getString("date_suport")), 
             rs.getString("observation"));
-    }
-
-    private LocalDateTime stringToLocaldateTime(String dateTime) {
-        System.out.println(dateTime.replace(" ", "T"));
-        return LocalDateTime.parse(dateTime.replace(" ", "T"));
     }
     
 }
