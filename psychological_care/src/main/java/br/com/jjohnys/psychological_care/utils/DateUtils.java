@@ -12,7 +12,7 @@ public class DateUtils {
     }
 
     public static LocalDateTime stringDateToLocalDateTime(String stringDate) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         return LocalDateTime.parse(stringDate, formatter);
     }
 

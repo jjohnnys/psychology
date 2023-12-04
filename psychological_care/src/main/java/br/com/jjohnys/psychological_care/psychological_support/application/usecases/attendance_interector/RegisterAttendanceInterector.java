@@ -1,4 +1,4 @@
-package br.com.jjohnys.psychological_care.psychological_support.application.usecases.AttendanceInterector;
+package br.com.jjohnys.psychological_care.psychological_support.application.usecases.attendance_interector;
 
 import org.springframework.stereotype.Service;
 

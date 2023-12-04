@@ -74,3 +74,5 @@ insert into contact (id, email, telephone, patient_id, responsible_id) values ("
 
 insert into patient_schedule (patient_id, day_of_Week, times_of_month, time_of_day, type_week) values ('paciente_2', 'Terca-feira', 2, '10:30:00', 'par');
 insert into patient_schedule (patient_id, day_of_Week, times_of_month, time_of_day, type_week) values ('paciente_5', 'Sexta-feira', 4, '10:30:00', 'todas');
+
+insert into attendance (id, patient_id, date_suport, observation) values ('attendance_1', 'paciente_2', '2023-11-04 20:00:00', 'Requisitos atendidos');

@@ -47,14 +47,21 @@ public class AttendanceRepositoryImpl implements AttendanceRepository {
     }
 
     @Override
+    public List<Attendance> getAttendanceByPatientId(String pattientId) {
+        return attendanceJDBC.getAttendanceByPatientId(pattientId);
+    }
+
+    @Override
     public List<Attendance> getAttendanceByPatient(String namePatiente) {
-        return getAttendanceByPatient(namePatiente);
+        return attendanceJDBC.getAttendanceByPatient(namePatiente);
     }
 
     @Override
     public List<Attendance> getPeriodOfAttendanceByPatientAndPeriod(String patienteId, LocalDate dateStart, LocalDate dateEnd) {
         return getPeriodOfAttendanceByPatientAndPeriod(patienteId, dateStart, dateEnd);
     }
+
+    
     
     
 }

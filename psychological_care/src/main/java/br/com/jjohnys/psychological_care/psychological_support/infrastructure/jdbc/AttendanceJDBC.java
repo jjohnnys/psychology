@@ -5,19 +5,18 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import br.com.jjohnys.psychological_care.psychological_support.domain.Attendance;
-import br.com.jjohnys.psychological_care.psychological_support.gateways.AttendanceRepository;
 import br.com.jjohnys.psychological_care.utils.DateUtils;
 
 @Repository
-public class AttendanceJDBC implements AttendanceRepository {
+public class AttendanceJDBC {
 
     @Autowired
     JdbcTemplate jdbcTemplate;
@@ -25,7 +24,7 @@ public class AttendanceJDBC implements AttendanceRepository {
     PatientJDBC patientJDBC;
 
     public int insertAttendance(Attendance attendance) {
-        return jdbcTemplate.update("insert into attendance (id, patient_id, date_suport, observation) values (?, ?, ?, ?)", attendance.getId(), attendance.getPatient().getId(), attendance.getDateSuport(), attendance.getObservation());        
+        return jdbcTemplate.update("insert into attendance (id, patient_id, date_suport, observation) values (?, ?, ?, ?)", genereteID(attendance.getId()), attendance.getPatient().getId(), attendance.getDateSuport(), attendance.getObservation());        
     }
 
     public int updateAttendance(Attendance attendance) {
@@ -59,6 +58,11 @@ public class AttendanceJDBC implements AttendanceRepository {
         }
     } 
 
+    public List<Attendance> getAttendanceByPatientId(String pattientId) {
+        String query = "select id, patient_id, date_suport, observation from attendance where patient_id = ? ";
+        return jdbcTemplate.query(query, (rs, rowNum) -> createAttendance(rs), new Object[]{pattientId});
+    }
+
     public List<Attendance> getAttendanceByPatient(String namePatiente) {
         String query = "select s.id, s.patient_id, s.date_suport, s.observation from attendance s, patient p where s.patient_id = p.id and p.name like '%" + namePatiente + "%'";
         return jdbcTemplate.query(query, (rs, rowNum) -> createAttendance(rs));
@@ -74,6 +78,11 @@ public class AttendanceJDBC implements AttendanceRepository {
             patientJDBC.findPatientById(rs.getString("patient_id")), 
             DateUtils.stringDateToLocalDateTime(rs.getString("date_suport")), 
             rs.getString("observation"));
+    }
+
+    private String genereteID(String id) {
+        if(id == null || id.isBlank()) return UUID.randomUUID().toString();
+        return id;
     }
     
 }

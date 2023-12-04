@@ -14,6 +14,7 @@ public interface AttendanceRepository {
     Attendance getAttendanceById(String attendanceId);
     List<Attendance> getAttendanceByDate(LocalDate dateSuport);
     Attendance getAttendanceByDateTime(LocalDateTime dateTimeSuport);
+    List<Attendance> getAttendanceByPatientId(String pattientId);
     List<Attendance> getAttendanceByPatient(String namePatiente);
     List<Attendance> getPeriodOfAttendanceByPatientAndPeriod(String patienteId, LocalDate dateStart, LocalDate dateEnd);
 
