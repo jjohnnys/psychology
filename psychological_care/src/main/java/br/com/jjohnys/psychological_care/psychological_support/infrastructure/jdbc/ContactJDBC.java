@@ -10,6 +10,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import br.com.jjohnys.psychological_care.psychological_support.domain.Contact;
+import br.com.jjohnys.psychological_care.psychological_support.domain.value_objects.EMAIL;
+import br.com.jjohnys.psychological_care.psychological_support.domain.value_objects.TELEFONE;
 import br.com.jjohnys.psychological_care.psychological_support.gateways.ContactRepository;
 
 @Component
@@ -19,11 +21,11 @@ public class ContactJDBC implements ContactRepository {
     JdbcTemplate jdbcTemplate;
 
     public int insertContact(Contact contact) {
-        return jdbcTemplate.update("insert into contact (id, email, telephone, patient_id, responsible_id) values (?, ?, ?, ?, ?)", genereteID(contact.getId()), contact.getEmail(), contact.getTelephone(), contact.getPatientId(), contact.getResponsibleId());        
+        return jdbcTemplate.update("insert into contact (id, email, telephone, patient_id, responsible_id) values (?, ?, ?, ?, ?)", genereteID(contact.getId()), contact.getEmail().get(), contact.getTelephone().get(), contact.getPatientId(), contact.getResponsibleId());        
     }
 
     public int updateContact(Contact contact) {
-        return jdbcTemplate.update("update contact set email = ?, telephone = ?, patient_id = ?, responsible_id = ? where id = ?", contact.getEmail(), contact.getTelephone(), contact.getPatientId(), contact.getResponsibleId(), contact.getId());
+        return jdbcTemplate.update("update contact set email = ?, telephone = ?, patient_id = ?, responsible_id = ? where id = ?", contact.getEmail().get(), contact.getTelephone().get(), contact.getPatientId(), contact.getResponsibleId(), contact.getId());
     }
 
     public List<Contact> getContactById(String id) {
@@ -56,14 +58,14 @@ public class ContactJDBC implements ContactRepository {
         if(rs.getString("patient_id") != null)
             return Contact.buildPatientContact(
                             rs.getString("id"),
-                            rs.getString("email"),
-                            rs.getString("telephone"),
+                            new EMAIL(rs.getString("email")),
+                            new TELEFONE(rs.getString("telephone")),
                             rs.getString("patient_id"));
         else {
             return Contact.buildResponsibleContact(
                             rs.getString("id"),
-                            rs.getString("email"),
-                            rs.getString("telephone"),
+                            new EMAIL(rs.getString("email")),
+                            new TELEFONE(rs.getString("telephone")),
                             rs.getString("responsible_id"));
         }                            
 

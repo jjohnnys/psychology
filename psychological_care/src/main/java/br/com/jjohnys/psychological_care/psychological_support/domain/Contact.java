@@ -1,5 +1,7 @@
 package br.com.jjohnys.psychological_care.psychological_support.domain;
 
+import br.com.jjohnys.psychological_care.psychological_support.domain.value_objects.EMAIL;
+import br.com.jjohnys.psychological_care.psychological_support.domain.value_objects.TELEFONE;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -11,17 +13,17 @@ import lombok.Getter;
 public class Contact {
 
     private String id;
-    private String email;
-    private String telephone;
+    private EMAIL email;
+    private TELEFONE telephone;
     private String patientId;
     private String responsibleId;
 
 
-    public static Contact buildPatientContact(String id, String email, String telephone, String patient_id)  {
+    public static Contact buildPatientContact(String id, EMAIL email, TELEFONE telephone, String patient_id)  {
         return new Contact(id, email, telephone, patient_id, null);
     }
 
-    public static Contact buildResponsibleContact(String id, String email, String telephone, String responsibel_id)  {
+    public static Contact buildResponsibleContact(String id, EMAIL email, TELEFONE telephone, String responsibel_id)  {
         return new Contact(id, email, telephone, null, responsibel_id);
     }
     

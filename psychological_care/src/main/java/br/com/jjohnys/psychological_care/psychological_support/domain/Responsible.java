@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import br.com.jjohnys.psychological_care.psychological_support.domain.value_objects.CPF;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
@@ -15,14 +16,14 @@ public class Responsible {
 
     private String id;
     private String name;
-    private String cpf;
+    private CPF cpf;
     private String rg;
     private LocalDate dateBirth;
     private String parentege;
     private Patient patient;
     private List<Contact> contacts = new ArrayList<Contact>();
 
-    public Responsible(String id, String name, String cpf, String rg, LocalDate dateBirth, String parentege,
+    public Responsible(String id, String name, CPF cpf, String rg, LocalDate dateBirth, String parentege,
             Patient patient) {
         this.id = id;
         this.name = name;

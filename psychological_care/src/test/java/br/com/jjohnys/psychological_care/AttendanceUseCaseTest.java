@@ -19,7 +19,7 @@ import br.com.jjohnys.psychological_care.psychological_support.domain.Attendance
 import br.com.jjohnys.psychological_care.psychological_support.gateways.AttendanceRepository;
 
 @SpringBootTest
-public class AttendanceTest {
+public class AttendanceUseCaseTest {
 
    @Autowired 
    private AtendanceInterectorFactory atendanceInterectorFactory;

@@ -1,12 +1,15 @@
 package br.com.jjohnys.psychological_care.psychological_support.domain;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import br.com.jjohnys.psychological_care.exceptions.PatientStatusException;
 import br.com.jjohnys.psychological_care.psychological_support.domain.enums.GenderEnum;
 import br.com.jjohnys.psychological_care.psychological_support.domain.enums.PatientStatusEnum;
+import br.com.jjohnys.psychological_care.psychological_support.domain.value_objects.CPF;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
@@ -18,7 +21,7 @@ public class Patient {
 
     private String id;
     private String name;
-    private String cpf;
+    private CPF cpf;
     private String rg;
     private LocalDate dateBirth;
     private Integer price;
@@ -30,7 +33,7 @@ public class Patient {
     private List<Responsible> responsibles = new ArrayList<Responsible>();;
     private List<Contact> contacts = new ArrayList<Contact>();
 
-    public Patient(String id, String name, String cpf, String rg, LocalDate dateBirth, Integer price, String schooling,
+    public Patient(String id, String name, CPF cpf, String rg, LocalDate dateBirth, Integer price, String schooling,
             GenderEnum gender, String address, PatientStatusEnum status, String observation) {
         this.id = id;
         this.name = name;
@@ -44,6 +47,27 @@ public class Patient {
         this.status = status;
         this.observation = observation;
     }
+
+    public Long getAge() {
+        return ChronoUnit.YEARS.between(this.dateBirth, LocalDate.now());
+    }
+
+    public void validateChangeStatus(Patient patient, PatientStatusEnum newPatientStatus) throws PatientStatusException {
+        if (newPatientStatus == PatientStatusEnum.TREATMENT_FINISHED) canFinishTratment();
+        else if(newPatientStatus == PatientStatusEnum.TREATMENT_FINISHED) validateStopTratment();
+        else throw new PatientStatusException("Status não mapeado em fluxo de negocio");
+    }
+
+    private void canFinishTratment() throws PatientStatusException {
+        boolean canFinish = (this.status == PatientStatusEnum.TREATMENT_FINISHED || this.status == PatientStatusEnum.TREATMENT_STOPED);
+        if(!canFinish) throw new PatientStatusException("Nao pode finalizar atendimento de um paciente sem estar com o atendimento em andamento");        
+    }
+
+    private void validateStopTratment() throws PatientStatusException {
+        boolean canStop = !(this.status == PatientStatusEnum.TREATMENT_STOPED);
+        if(!canStop) throw new PatientStatusException("Só é possivel interromper um tratamento quando o tratamento esta em andamento");
+    }
+
 
     public List<Responsible> addResponsible(Responsible responsible) {
         this.responsibles.add(responsible);

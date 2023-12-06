@@ -18,6 +18,10 @@ public class PatientSchedule {
     private LocalTime time;
     private TypeWeekEnum typeWeek;
 
+    public void vaidateTimesOfMonth() {
+        if(this.timesOfMonth > 5) throw new BusinessExceptions("Não pode ter mais que cinco atendimentos por mês");
+    }
+
     public enum TypeWeekEnum {
 
         PAIR("par"),

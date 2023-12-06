@@ -6,6 +6,7 @@ import br.com.jjohnys.psychological_care.psychological_support.domain.Contact;
 import br.com.jjohnys.psychological_care.psychological_support.domain.Patient;
 import br.com.jjohnys.psychological_care.psychological_support.domain.Responsible;
 import br.com.jjohnys.psychological_care.psychological_support.domain.enums.PatientStatusEnum;
+import br.com.jjohnys.psychological_care.psychological_support.domain.value_objects.CPF;
 
 public interface PatientRepository {
 
@@ -19,11 +20,11 @@ public interface PatientRepository {
 
     Patient findFullPatientById(String id);
 
-    Patient findPatientByCpf(String cpf);
+    Patient findPatientByCpf(CPF cpf);
     
-    boolean existisOtherPatientWithSameCPF(String id, String cpf);
+    boolean existisOtherPatientWithSameCPF(String id, CPF cpf);
 
-    boolean existisOtherResponsibleWithSameCPF(String id, String cpf);
+    boolean existisOtherResponsibleWithSameCPF(String id, CPF cpf);
 
     int changeStatusPatient(String patientId, PatientStatusEnum status);
 }

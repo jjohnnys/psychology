@@ -17,6 +17,7 @@ import br.com.jjohnys.psychological_care.psychological_support.domain.Patient;
 import br.com.jjohnys.psychological_care.psychological_support.domain.PatientSchedule;
 import br.com.jjohnys.psychological_care.psychological_support.domain.enums.DaysOfWeekEnum;
 import br.com.jjohnys.psychological_care.psychological_support.domain.enums.PatientStatusEnum;
+import br.com.jjohnys.psychological_care.psychological_support.domain.value_objects.CPF;
 import br.com.jjohnys.psychological_care.psychological_support.gateways.PatientRepository;
 import br.com.jjohnys.psychological_care.psychological_support.gateways.PatientScheduleRepository;
 import br.com.jjohnys.psychological_care.utils.DateUtils;
@@ -72,7 +73,7 @@ public class PatienteScheduleUseCaseTest {
     @Test
     public void sholdReturnErrorWithInvalidPatiente() {
 
-        Patient patient = new Patient("invalid_patient", "Invalid Patient", "111.587.965.88", "55.552.333-4", DateUtils.stringDateToLocalDate("2000-04-07"), 100, "Nao estoudou", null, "Qualquer lugar", PatientStatusEnum.IN_TREATMENT, "Nao existe");        
+        Patient patient = new Patient("invalid_patient", "Invalid Patient", new CPF("111.587.965.88"), "55.552.333-4", DateUtils.stringDateToLocalDate("2000-04-07"), 100, "Nao estoudou", null, "Qualquer lugar", PatientStatusEnum.IN_TREATMENT, "Nao existe");        
         Integer timesOfMonth = 4;
         PatientScheduleDTO patientScheduleDTO = new PatientScheduleDTO(patient.getId(), "Segunda-feira", timesOfMonth, "10:30:00", PatientSchedule.TypeWeekEnum.PAIR.getTypeWeek());
         assertThrows(BusinessExceptions.class, () -> createPatientScheduleUseCase.create(patientScheduleDTO), "Paciente nao cadastrado");

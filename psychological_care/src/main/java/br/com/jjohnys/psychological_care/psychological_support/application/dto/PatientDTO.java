@@ -31,12 +31,12 @@ public record PatientDTO (
     }
 
     public static PatientDTO cretePatientDTO(Patient patient) {        
-        return new PatientDTO(patient.getId(), patient.getName(), patient.getCpf(), patient.getRg(), patient.getDateBirth(), patient.getPrice(), patient.getSchooling(), patient.getGender().getDescription(), patient.getAddress(), 
+        return new PatientDTO(patient.getId(), patient.getName(), patient.getCpf().get(), patient.getRg(), patient.getDateBirth(), patient.getPrice(), patient.getSchooling(), patient.getGender().getDescription(), patient.getAddress(), 
             patient.getResponsibles().stream().map(responsible -> 
-                new ResponsibleDTO(responsible.getId(), responsible.getName(), responsible.getCpf(), responsible.getRg(), responsible.getDateBirth(), responsible.getParentege(), 
-                responsible.getContacts().stream().map(contact -> new ContactDTO(contact.getId(), contact.getEmail(), contact.getTelephone())).collect(Collectors.toList()))).
+                new ResponsibleDTO(responsible.getId(), responsible.getName(), responsible.getCpf().get(), responsible.getRg(), responsible.getDateBirth(), responsible.getParentege(), 
+                responsible.getContacts().stream().map(contact -> new ContactDTO(contact.getId(), contact.getEmail().get(), contact.getTelephone().get())).collect(Collectors.toList()))).
                 collect(Collectors.toList()), 
-            patient.getStatus().getStatus(), patient.getObservation(), patient.getContacts().stream().map(contact -> new ContactDTO(contact.getId(), contact.getEmail(), contact.getTelephone())).collect(Collectors.toList()));
+            patient.getStatus().getStatus(), patient.getObservation(), patient.getContacts().stream().map(contact -> new ContactDTO(contact.getId(), contact.getEmail().get(), contact.getTelephone().get())).collect(Collectors.toList()));
     }
         
     public record ResponsibleDTO(String id, String name, String cpf, String rg, LocalDate dateBirth, String parentenge, List<ContactDTO> contacts) {

@@ -9,6 +9,7 @@ import br.com.jjohnys.psychological_care.psychological_support.domain.Contact;
 import br.com.jjohnys.psychological_care.psychological_support.domain.Patient;
 import br.com.jjohnys.psychological_care.psychological_support.domain.Responsible;
 import br.com.jjohnys.psychological_care.psychological_support.domain.enums.PatientStatusEnum;
+import br.com.jjohnys.psychological_care.psychological_support.domain.value_objects.CPF;
 import br.com.jjohnys.psychological_care.psychological_support.gateways.PatientRepository;
 import br.com.jjohnys.psychological_care.psychological_support.infrastructure.jdbc.ContactJDBC;
 import br.com.jjohnys.psychological_care.psychological_support.infrastructure.jdbc.PatientJDBC;
@@ -75,7 +76,7 @@ public class PatientRepositoryImpl implements PatientRepository {
     }
 
     @Override
-    public Patient findPatientByCpf(String cpf) throws BusinessExceptions {
+    public Patient findPatientByCpf(CPF cpf) throws BusinessExceptions {
         return this.getFullPatiente(patientJDBC.findPatientByCPF(cpf));        
     }
 
@@ -102,12 +103,12 @@ public class PatientRepositoryImpl implements PatientRepository {
     }
 
     @Override
-    public boolean existisOtherPatientWithSameCPF(String id, String cpf) {
+    public boolean existisOtherPatientWithSameCPF(String id, CPF cpf) {
         return patientJDBC.existisOtherPatientWithSameCPF(id, cpf);
     }
 
     @Override
-    public boolean existisOtherResponsibleWithSameCPF(String id, String cpf) {
+    public boolean existisOtherResponsibleWithSameCPF(String id, CPF cpf) {
         return responsibleJDBC.existisOtherResponsibleWithSameCPF(id, cpf);
     }
 

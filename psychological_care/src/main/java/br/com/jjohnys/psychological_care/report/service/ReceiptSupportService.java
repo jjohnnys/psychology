@@ -27,7 +27,7 @@ public class ReceiptSupportService {
         ReceiptData receiptData = ReceiptData.builder().
         patientName(patient.getName()).
         patientRG(patient.getRg()).
-        patienteCPF(patient.getCpf()).
+        patienteCPF(patient.getCpf().get()).
         totalSesions(supports.size()).
         dates(supports.stream().map(suport -> DateUtils.localDateTimeToString(suport.getDateSuport())).collect(Collectors.joining(", "))).build();
         

@@ -11,21 +11,20 @@ public abstract class ChangePacienteStatusInterector {
 
     @Autowired
     private PatientRepository patientRepository;
+    protected PatientStatusEnum patientStatusEnum;
 
-    abstract void validateChangeStatus(Patient patient, PatientStatusEnum newPatientStatus);
-    abstract void change(Patient patient, PatientStatusEnum newPatientStatus);
+    abstract void validate(Patient patient);
+    abstract void change(Patient patient);
     
-    public void execute(String patientId, String status) {
-        PatientStatusEnum newPatientStatus = PatientStatusEnum.getStatusPatientEnum(status);        
+    public void execute(String patientId) {
         Patient patient = patientRepository.findPatientById(patientId);
-        validateChangeStatus(patient, newPatientStatus);
-        change(patient, newPatientStatus);
-        changeStatuPatient(patientId, newPatientStatus);
-        
+        validate(patient);
+        change(patient);
+        changeRepository(patientId);        
     }  
 
-    void changeStatuPatient(String patientId, PatientStatusEnum newPatientStatus) {
-        patientRepository.changeStatusPatient(patientId, newPatientStatus);
+    void changeRepository(String patientId) {
+        patientRepository.changeStatusPatient(patientId, patientStatusEnum);
     }
 
 }

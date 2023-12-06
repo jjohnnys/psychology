@@ -12,6 +12,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import br.com.jjohnys.psychological_care.psychological_support.domain.Responsible;
+import br.com.jjohnys.psychological_care.psychological_support.domain.value_objects.CPF;
 
 @Repository
 public class ResponsibleJDBC {
@@ -25,18 +26,18 @@ public class ResponsibleJDBC {
     public void insertResponsible(Responsible responsible) {
 
         jdbcTemplate.update("insert into responsible (id, name, cpf, rg, date_birth, parentenge, patient_id) values (?, ?, ?, ?, ?, ?, ?)", 
-        genereteID(responsible.getId()), responsible.getName(), responsible.getCpf(), responsible.getRg(), responsible.getDateBirth(), responsible.getParentege() , responsible.getPatient().getId());      
+        genereteID(responsible.getId()), responsible.getName(), responsible.getCpf().get(), responsible.getRg(), responsible.getDateBirth(), responsible.getParentege() , responsible.getPatient().getId());      
 
     }
 
     public void updateResponsible(Responsible responsible) {
         jdbcTemplate.update("update responsible set name = ?, cpf = ?, rg = ?, date_birth = ?, parentenge = ?, patient_id = ? where id = ?",
-         responsible.getName(), responsible.getCpf(), responsible.getRg(), responsible.getDateBirth(), responsible.getParentege(), responsible.getPatient().getId() , responsible.getId());
+         responsible.getName(), responsible.getCpf().get(), responsible.getRg(), responsible.getDateBirth(), responsible.getParentege(), responsible.getPatient().getId() , responsible.getId());
     }
 
-    public Responsible findResponsiblesByCPF(String cpf) {
+    public Responsible findResponsiblesByCPF(CPF cpf) {
         String query = "select * from where cpf = ? ";
-      return jdbcTemplate.queryForObject(query, (rs, rowNum) -> createResponsible(rs), new Object[]{cpf});
+      return jdbcTemplate.queryForObject(query, (rs, rowNum) -> createResponsible(rs), new Object[]{cpf.get()});
 
     }
 
@@ -62,12 +63,12 @@ public class ResponsibleJDBC {
       return jdbcTemplate.query(query, (rs, rowNum) -> createResponsible(rs), new Object[]{"%"+patientName+"%"});
     }
 
-    public boolean existisOtherResponsibleWithSameCPF(String id, String cpf) {
+    public boolean existisOtherResponsibleWithSameCPF(String id, CPF cpf) {
 
         StringBuilder sb = new StringBuilder();
         sb.append("select * from responsible where ");
         if(id != null && !id.isBlank()) sb.append("id <> '" + id + "' and ");            
-        sb.append("cpf = '" + cpf + "'");
+        sb.append("cpf = '" + cpf.get() + "'");
         try {            
            return jdbcTemplate.queryForObject(sb.toString(), (rs, rowNum) -> createResponsible(rs)) != null;
         } catch (EmptyResultDataAccessException e) {
@@ -79,7 +80,7 @@ public class ResponsibleJDBC {
         return new Responsible(
             rs.getString("id"), 
             rs.getString("name"), 
-            rs.getString("cpf"), 
+            new CPF(rs.getString("cpf")), 
             rs.getString("rg"), 
             (LocalDate.parse(rs.getString("date_birth"))), 
             rs.getString("parentenge"),
