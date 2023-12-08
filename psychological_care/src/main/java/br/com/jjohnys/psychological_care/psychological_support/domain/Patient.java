@@ -54,17 +54,17 @@ public class Patient {
 
     public void validateChangeStatus(Patient patient, PatientStatusEnum newPatientStatus) throws PatientStatusException {
         if (newPatientStatus == PatientStatusEnum.TREATMENT_FINISHED) canFinishTratment();
-        else if(newPatientStatus == PatientStatusEnum.TREATMENT_FINISHED) validateStopTratment();
+        else if(newPatientStatus == PatientStatusEnum.TREATMENT_STOPED) validateStopTratment();
         else throw new PatientStatusException("Status não mapeado em fluxo de negocio");
     }
 
     private void canFinishTratment() throws PatientStatusException {
         boolean canFinish = (this.status == PatientStatusEnum.TREATMENT_FINISHED || this.status == PatientStatusEnum.TREATMENT_STOPED);
-        if(!canFinish) throw new PatientStatusException("Nao pode finalizar atendimento de um paciente sem estar com o atendimento em andamento");        
+        if(canFinish) throw new PatientStatusException("Nao pode finalizar atendimento de um paciente sem estar com o atendimento em andamento");        
     }
 
     private void validateStopTratment() throws PatientStatusException {
-        boolean canStop = !(this.status == PatientStatusEnum.TREATMENT_STOPED);
+        boolean canStop = (this.status == PatientStatusEnum.IN_TREATMENT);
         if(!canStop) throw new PatientStatusException("Só é possivel interromper um tratamento quando o tratamento esta em andamento");
     }
 

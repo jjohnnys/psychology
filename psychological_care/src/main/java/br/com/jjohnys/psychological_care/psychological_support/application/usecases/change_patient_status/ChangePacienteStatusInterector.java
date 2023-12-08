@@ -2,6 +2,7 @@ package br.com.jjohnys.psychological_care.psychological_support.application.usec
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import br.com.jjohnys.psychological_care.exceptions.PatientStatusException;
 import br.com.jjohnys.psychological_care.psychological_support.domain.Patient;
 import br.com.jjohnys.psychological_care.psychological_support.domain.enums.PatientStatusEnum;
 import br.com.jjohnys.psychological_care.psychological_support.gateways.PatientRepository;
@@ -16,7 +17,7 @@ public abstract class ChangePacienteStatusInterector {
     abstract void validate(Patient patient);
     abstract void change(Patient patient);
     
-    public void execute(String patientId) {
+    public void execute(String patientId) throws PatientStatusException {
         Patient patient = patientRepository.findPatientById(patientId);
         validate(patient);
         change(patient);

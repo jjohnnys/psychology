@@ -19,7 +19,6 @@ public class ResponsibleJDBC {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
-
     @Autowired
     private PatientJDBC patientJDBC;
 

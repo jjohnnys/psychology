@@ -5,7 +5,6 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
@@ -13,11 +12,12 @@ import br.com.jjohnys.psychological_care.psychological_support.domain.Contact;
 import br.com.jjohnys.psychological_care.psychological_support.domain.value_objects.EMAIL;
 import br.com.jjohnys.psychological_care.psychological_support.domain.value_objects.TELEFONE;
 import br.com.jjohnys.psychological_care.psychological_support.gateways.ContactRepository;
+import lombok.AllArgsConstructor;
 
 @Component
+@AllArgsConstructor
 public class ContactJDBC implements ContactRepository {
-
-    @Autowired
+    
     JdbcTemplate jdbcTemplate;
 
     public int insertContact(Contact contact) {

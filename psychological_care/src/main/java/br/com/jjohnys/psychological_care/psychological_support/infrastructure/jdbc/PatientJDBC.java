@@ -15,11 +15,12 @@ import br.com.jjohnys.psychological_care.psychological_support.domain.Patient;
 import br.com.jjohnys.psychological_care.psychological_support.domain.enums.GenderEnum;
 import br.com.jjohnys.psychological_care.psychological_support.domain.enums.PatientStatusEnum;
 import br.com.jjohnys.psychological_care.psychological_support.domain.value_objects.CPF;
+import lombok.AllArgsConstructor;
 
 @Repository
+@AllArgsConstructor
 public class PatientJDBC{
 
-    @Autowired
     JdbcTemplate jdbcTemplate;
 
     public int insertPatient(Patient patient) {

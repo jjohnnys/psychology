@@ -55,26 +55,26 @@ public class PatienteUseCaseTest {
     public void createPatientSuccess() {
       
         List<ContactDTO> contactsDTO = new ArrayList<ContactDTO>();
-        contactsDTO.add(new ContactDTO(null, "ikki@mail.com", "85 98745"));
-        PatientDTO patientDTO = new PatientDTO(null, "Ikki", "985.698.497-22", "99.689.695-5", DateUtils.stringDateToLocalDate("1987-04-15"), 100, "PosGraduado", GenderEnum.MALE.getDescription(), "Ilha dificil", null, PatientStatusEnum.IN_TREATMENT.getStatus(), "Muito forte", contactsDTO);       
+        contactsDTO.add(new ContactDTO(null, "ikki@mail.com", "85 98222-4441"));
+        PatientDTO patientDTO = new PatientDTO(null, "Ikki", "733.679.300-24", "99.689.695-5", DateUtils.stringDateToLocalDate("1987-04-15"), 100, "PosGraduado", GenderEnum.MALE.getDescription(), "Ilha dificil", null, PatientStatusEnum.IN_TREATMENT.getStatus(), "Muito forte", contactsDTO);       
         createPatientInterector.createPatient(patientDTO);
-        Patient patient = patientRepository.findPatientByCpf(new CPF("985.698.497-22"));
+        Patient patient = patientRepository.findPatientByCpf(new CPF("733.679.300-24"));
 
-        assertEquals(patient.getCpf(), "985.698.497-22", "Paciente criado");
-        assertEquals(patient.getContacts().stream().findFirst().get().getEmail(), "ikki@mail.com", "Contato do paciente criado");        
+        assertEquals(patient.getCpf().get(), "733.679.300-24", "Paciente criado");
+        assertEquals(patient.getContacts().stream().findFirst().get().getEmail().get(), "ikki@mail.com", "Contato do paciente criado");        
     }
 
     @Test
     public void createPatientDuplicateCpfError() {
 
         List<ContactDTO> contactsDTO = new ArrayList<ContactDTO>();
-        contactsDTO.add(new ContactDTO(null, "miro@mail.com", "11 9875478"));
-        PatientDTO patientDTO = new PatientDTO(null, "Miro", "777.887.888-11", "42.221.332-5", DateUtils.stringDateToLocalDate("1987-04-15"), 100, "PosGraduado", GenderEnum.MALE.getDescription(), "Grecia", null, PatientStatusEnum.IN_TREATMENT.getStatus(), "Certeiro", contactsDTO);       
+        contactsDTO.add(new ContactDTO(null, "miro@mail.com", "83 84411-1144"));
+        PatientDTO patientDTO = new PatientDTO(null, "Miro", "629.840.840-12", "42.221.332-5", DateUtils.stringDateToLocalDate("1987-04-15"), 100, "PosGraduado", GenderEnum.MALE.getDescription(), "Grecia", null, PatientStatusEnum.IN_TREATMENT.getStatus(), "Certeiro", contactsDTO);       
         createPatientInterector.createPatient(patientDTO);
 
         List<ContactDTO> contactsDuplicateCfp = new ArrayList<ContactDTO>();
-        contactsDTO.add(new ContactDTO(null, "mu@mail.com", "11 8555254"));
-        PatientDTO patientDuplicateCfp = new PatientDTO(null, "Mu", "777.887.888-11", "55.288.647-2", DateUtils.stringDateToLocalDate("1987-04-15"), 100, "PosGraduado", GenderEnum.MALE.getDescription(), "Grecia", null, PatientStatusEnum.IN_TREATMENT.getStatus(), "Certeiro", contactsDuplicateCfp);       
+        contactsDTO.add(new ContactDTO(null, "mu@mail.com", "17 75411-9944"));
+        PatientDTO patientDuplicateCfp = new PatientDTO(null, "Mu", "629.840.840-12", "55.288.647-2", DateUtils.stringDateToLocalDate("1987-04-15"), 100, "PosGraduado", GenderEnum.MALE.getDescription(), "Grecia", null, PatientStatusEnum.IN_TREATMENT.getStatus(), "Certeiro", contactsDuplicateCfp);       
 
         assertThrows(BusinessExceptions.class, () -> createPatientInterector.createPatient(patientDuplicateCfp), "Ja existe o CPF: 777.887.888-11 cadastrado");
 
@@ -84,24 +84,24 @@ public class PatienteUseCaseTest {
     public void createPatientWithResponsibelSuccess() {
       
         List<ContactDTO> contactsResponsivelDTO = new ArrayList<ContactDTO>();
-        contactsResponsivelDTO.add(new ContactDTO(null, "mestre@mail.com", "55 5544551"));
+        contactsResponsivelDTO.add(new ContactDTO(null, "mestre@mail.com", "83 44488-5822"));
         List<PatientDTO.ResponsibleDTO> responsiblesDTO = new ArrayList<PatientDTO.ResponsibleDTO>();
-        responsiblesDTO.add(new PatientDTO.ResponsibleDTO(null, "Mestre", "888.654.654-55", "44.663.445-2", DateUtils.stringDateToLocalDate("1980-04-15"), "mestre", contactsResponsivelDTO));
+        responsiblesDTO.add(new PatientDTO.ResponsibleDTO(null, "Mestre", "953.906.270-59", "44.663.445-2", DateUtils.stringDateToLocalDate("1980-04-15"), "mestre", contactsResponsivelDTO));
         
         List<ContactDTO> contactsDTO = new ArrayList<ContactDTO>();
-        contactsDTO.add(new ContactDTO(null, "aldebaram@mail.com", "13 56987"));
-        PatientDTO patientDTO = new PatientDTO(null, "Aldebaram", "453.222.333-44", "99.689.888-5", DateUtils.stringDateToLocalDate("1987-04-15"), 100, "PosGraduado", GenderEnum.MALE.getDescription(), "Ilha dificil", responsiblesDTO, PatientStatusEnum.IN_TREATMENT.getStatus(), "Muito forte", contactsDTO);       
+        contactsDTO.add(new ContactDTO(null, "aldebaram@mail.com", "11 44555-1114"));
+        PatientDTO patientDTO = new PatientDTO(null, "Aldebaram", "553.810.110-08", "99.689.888-5", DateUtils.stringDateToLocalDate("1987-04-15"), 100, "PosGraduado", GenderEnum.MALE.getDescription(), "Ilha dificil", responsiblesDTO, PatientStatusEnum.IN_TREATMENT.getStatus(), "Muito forte", contactsDTO);       
         
         createPatientInterector.createPatient(patientDTO);
-        Patient patient = patientRepository.findPatientByCpf(new CPF("453.222.333-44"));
+        Patient patient = patientRepository.findPatientByCpf(new CPF("553.810.110-08"));
 
-        assertEquals(patient.getResponsibles().stream().findFirst().get().getCpf(), "888.654.654-55", "Mestre criado");
-        assertEquals(patient.getResponsibles().stream().findFirst().get().getContacts().stream().findFirst().get().getEmail(), "mestre@mail.com", "Contato do mestre criado");        
+        assertEquals(patient.getResponsibles().stream().findFirst().get().getCpf().get(), "953.906.270-59", "Mestre criado");
+        assertEquals(patient.getResponsibles().stream().findFirst().get().getContacts().stream().findFirst().get().getEmail().get(), "mestre@mail.com", "Contato do mestre criado");        
     }
 
     @Test
     public void getPatientSuccess() {
-        Patient patient = patientRepository.findPatientByCpf(new CPF("879.597.845-98"));
+        Patient patient = patientRepository.findPatientByCpf(new CPF("014.565.740-00"));
         PatientDTO patientDTO = PatientDTO.cretePatientDTO(patient);        
         assertEquals(patientDTO.name(), "Seiya de Pagasus", "Encontrou o paciente!");        
         assertEquals(patientDTO.getResponsiblesDTO().stream().findFirst().get().name(), "Shun de Andromeda", "Encontrou o responssavel!");
@@ -110,14 +110,14 @@ public class PatienteUseCaseTest {
     @Test
     public void updatePacienteSuccess() {
 
-        Patient patient = patientRepository.findPatientByCpf(new CPF("879.597.845-98"));
+        Patient patient = patientRepository.findPatientByCpf(new CPF("014.565.740-00"));
         Responsible responsible = patient.getResponsibles().stream().findAny().get();
         Contact responsibleContact = patient.getResponsibles().stream().findAny().get().getContacts().stream().findFirst().get();
         ContactDTO contactResponsibelDTO = new ContactDTO(responsibleContact.getId(), "shumdeandromeda@email.com", responsibleContact.getTelephone().get());
         List<ContactDTO> contactsResponsibelDTO = new ArrayList<ContactDTO>();
         contactsResponsibelDTO.add(contactResponsibelDTO);
 
-        PatientDTO.ResponsibleDTO responsibleDTO = new PatientDTO.ResponsibleDTO(responsible.getId(), responsible.getName(), "777.548.852-47", responsible.getRg(), responsible.getDateBirth(), responsible.getParentege(), contactsResponsibelDTO);
+        PatientDTO.ResponsibleDTO responsibleDTO = new PatientDTO.ResponsibleDTO(responsible.getId(), responsible.getName(), "485.612.920-16", responsible.getRg(), responsible.getDateBirth(), responsible.getParentege(), contactsResponsibelDTO);
         List<PatientDTO.ResponsibleDTO> responsibelsDTO = new ArrayList<PatientDTO.ResponsibleDTO>();
         responsibelsDTO.add(responsibleDTO);
         Contact contact = patient.getContacts().stream().findFirst().get();
@@ -128,14 +128,14 @@ public class PatienteUseCaseTest {
         
         updatePatientInterector.updatePatient(patientDTO);
 
-        Patient patientUpdated = patientRepository.findPatientByCpf(new CPF("879.597.845-98"));
+        Patient patientUpdated = patientRepository.findPatientByCpf(new CPF("014.565.740-00"));
         PatientDTO patientDTOUpdated = PatientDTO.cretePatientDTO(patientUpdated); 
 
 
         assertEquals(patientDTOUpdated.responsiblesDTO().stream().findFirst().get().contacts().stream().findFirst().get().email() , "shumdeandromeda@email.com", "Email do responsavel alterado!");
         assertEquals(patientDTOUpdated.contactsDTO().stream().findFirst().get().email() , "seiyadepegasus@email.com", "Email do paciente alterado!");
 
-        assertEquals(patientDTOUpdated.responsiblesDTO().stream().findFirst().get().cpf() , "777.548.852-47", "CPF do responsavel alterado!");
+        assertEquals(patientDTOUpdated.responsiblesDTO().stream().findFirst().get().cpf() , "485.612.920-16", "CPF do responsavel alterado!");
         assertEquals(patientDTOUpdated.schooling() , "Lutador", "Escolaridade do paciente alterado!");
 
 
@@ -143,21 +143,21 @@ public class PatienteUseCaseTest {
 
     @Test
     public void changeStatusPatient() {
-        String patientId = patientRepository.findPatientByCpf(new CPF("879.597.845-98")).getId();
+        String patientId = patientRepository.findPatientByCpf(new CPF("014.565.740-00")).getId();
         PatientStatusEnum newStatus = PatientStatusEnum.TREATMENT_FINISHED;
         ChangePacienteStatusInterector changePacienteStatus = changePacienteStatusInterectorFactory.create(newStatus);      
         changePacienteStatus.execute(patientId);
-        Patient patient = patientRepository.findPatientByCpf(new CPF("879.597.845-98"));
+        Patient patient = patientRepository.findPatientByCpf(new CPF("014.565.740-00"));
         assertTrue(patient.getStatus() == PatientStatusEnum.TREATMENT_FINISHED, "Status alterado com sucesso");
     }
 
     @Test
     public void dasablePatient() {
         List<ContactDTO> contactsDTO = new ArrayList<ContactDTO>();
-        contactsDTO.add(new ContactDTO(null, "mu@mail.com", "85 98745"));
-        PatientDTO patientDTO = new PatientDTO(null, "Mu", "445.225.112-21", "88.551.362-7", DateUtils.stringDateToLocalDate("1987-04-15"), 100, "PosGraduado", GenderEnum.MALE.getDescription(), "Ilha dificil", null, PatientStatusEnum.IN_TREATMENT.getStatus(), "Sereno", contactsDTO);       
+        contactsDTO.add(new ContactDTO(null, "mu@mail.com", "11 32353-5555"));
+        PatientDTO patientDTO = new PatientDTO(null, "Mu", "309.242.760-29", "88.551.362-7", DateUtils.stringDateToLocalDate("1987-04-15"), 100, "PosGraduado", GenderEnum.MALE.getDescription(), "Ilha dificil", null, PatientStatusEnum.IN_TREATMENT.getStatus(), "Sereno", contactsDTO);       
         createPatientInterector.createPatient(patientDTO);
-        Patient patient = patientRepository.findPatientByCpf(new CPF("445.225.112-21"));
+        Patient patient = patientRepository.findPatientByCpf(new CPF("309.242.760-29"));
         DaysOfWeekEnum dayOfWeek = DaysOfWeekEnum.SATURDAY;
         Integer timesOfMonth = 4;        
         
@@ -173,7 +173,7 @@ public class PatienteUseCaseTest {
 
     @Test
     public void ReturnsErrorWhenCompletingServiceWithoutBeingInProgress() {        
-        String patientId = patientRepository.findPatientByCpf(new CPF("215.444.554-88")).getId();
+        String patientId = patientRepository.findPatientByCpf(new CPF("399.743.590-15")).getId();
         PatientStatusEnum newStatus = PatientStatusEnum.TREATMENT_FINISHED;  
         ChangePacienteStatusInterector changePacienteStatus = changePacienteStatusInterectorFactory.create(newStatus);      
         assertThrows(PatientStatusException.class, () -> changePacienteStatus.execute(patientId), "Nao pode finalizar atendimento de um paciente sem estar com o atendimento em andamento");
@@ -181,7 +181,7 @@ public class PatienteUseCaseTest {
 
     @Test
     public void ReturnsErrorWhenInterruptedAFinishedService() {        
-        String patientId = patientRepository.findPatientByCpf(new CPF("877.441.558-88")).getId();
+        String patientId = patientRepository.findPatientByCpf(new CPF("014.565.740-00")).getId();
         PatientStatusEnum newStatus = PatientStatusEnum.TREATMENT_STOPED; 
         ChangePacienteStatusInterector changePacienteStatus = changePacienteStatusInterectorFactory.create(newStatus);             
         assertThrows(PatientStatusException.class, () -> changePacienteStatus.execute(patientId), "Só é possivel interromper um tratamento quando o tratamento esta em andamento");
