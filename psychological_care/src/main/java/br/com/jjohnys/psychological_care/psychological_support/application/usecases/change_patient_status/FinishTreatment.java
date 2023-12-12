@@ -2,33 +2,14 @@ package br.com.jjohnys.psychological_care.psychological_support.application.usec
 
 import org.springframework.stereotype.Service;
 
-import br.com.jjohnys.psychological_care.psychological_support.domain.Patient;
-import br.com.jjohnys.psychological_care.psychological_support.gateways.PatientScheduleRepository;
-import lombok.AllArgsConstructor;
+import br.com.jjohnys.psychological_care.psychological_support.domain.enums.PatientStatusEnum;
 
 @Service
-@AllArgsConstructor
 public class FinishTreatment extends ChangePacienteStatusInterector {
-    
-    private PatientScheduleRepository patientScheduleRepository;
 
     @Override
-    void validate(Patient patient) {
-        patientStatusEnum = patientStatusEnum.TREATMENT_FINISHED;
-        patient.validateChangeStatus(patient, patientStatusEnum);        
+    void setPatientStatusEnum() {
+        super.patientStatusEnum = PatientStatusEnum.TREATMENT_FINISHED;
     }
 
-    @Override
-    void change(Patient patient) {
-        patientScheduleRepository.deleteByPatientId(patient.getId());
-    }
-
-    
-
-    
-
-    
-
-
-    
 }
