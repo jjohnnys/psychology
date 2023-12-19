@@ -3,7 +3,6 @@ package br.com.jjohnys.psychological_care;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +20,6 @@ import br.com.jjohnys.psychological_care.psychological_support.application.useca
 import br.com.jjohnys.psychological_care.psychological_support.application.usecases.CreatePatientScheduleUseCaseInterector;
 import br.com.jjohnys.psychological_care.psychological_support.application.usecases.UpdatePatientInterector;
 import br.com.jjohnys.psychological_care.psychological_support.application.usecases.change_patient_status.ChangePacienteStatusInterector;
-import br.com.jjohnys.psychological_care.psychological_support.application.usecases.change_patient_status.ChangePacienteStatusInterectorFactory;
 import br.com.jjohnys.psychological_care.psychological_support.domain.Contact;
 import br.com.jjohnys.psychological_care.psychological_support.domain.Patient;
 import br.com.jjohnys.psychological_care.psychological_support.domain.PatientSchedule;
@@ -44,11 +42,11 @@ public class PatienteUseCaseTest {
     @Autowired
     private PatientRepository patientRepository;
     @Autowired
-    private ChangePacienteStatusInterectorFactory changePacienteStatusInterectorFactory;   
-    @Autowired
     private CreatePatientScheduleUseCaseInterector createPatientScheduleUseCase;
     @Autowired 
     PatientScheduleRepository patientScheduleRepository;
+    @Autowired
+    private ChangePacienteStatusInterector changePacienteStatusInterector;
     
 
     @Test
@@ -144,11 +142,9 @@ public class PatienteUseCaseTest {
     @Test
     public void changeStatusPatient() {
         String patientId = patientRepository.findPatientByCpf(new CPF("014.565.740-00")).getId();
-        PatientStatusEnum newStatus = PatientStatusEnum.TREATMENT_FINISHED;
-        ChangePacienteStatusInterector changePacienteStatus = changePacienteStatusInterectorFactory.create(newStatus);      
-        changePacienteStatus.execute(patientId);
+        changePacienteStatusInterector.execute(patientId, PatientStatusEnum.TREATMENT_FINISHED);
         Patient patient = patientRepository.findPatientByCpf(new CPF("014.565.740-00"));
-        assertTrue(patient.getStatus() == PatientStatusEnum.TREATMENT_FINISHED, "Status alterado com sucesso");
+        assertEquals(patient.getStatus(), PatientStatusEnum.TREATMENT_FINISHED, "Status alterado com sucesso");
     }
 
     @Test
@@ -163,9 +159,7 @@ public class PatienteUseCaseTest {
         
         PatientScheduleDTO patientScheduleDTO = new PatientScheduleDTO(patient.getId(), dayOfWeek.getDaysOfWeek(), timesOfMonth, "10:30:00", PatientSchedule.TypeWeekEnum.PAIR.getTypeWeek());
         createPatientScheduleUseCase.create(patientScheduleDTO);
-        PatientStatusEnum newStatus = PatientStatusEnum.TREATMENT_STOPED;
-        ChangePacienteStatusInterector changePacienteStatus = changePacienteStatusInterectorFactory.create(newStatus);      
-        changePacienteStatus.execute(patient.getId());
+        changePacienteStatusInterector.execute(patient.getId(), PatientStatusEnum.TREATMENT_STOPED);
         PatientSchedule patientSchedule = patientScheduleRepository.getScheduleByPatienteId(patient.getId());
         assertNull(patientSchedule);
 
@@ -174,17 +168,13 @@ public class PatienteUseCaseTest {
     @Test
     public void ReturnsErrorWhenCompletingServiceWithoutBeingInProgress() {        
         String patientId = patientRepository.findPatientByCpf(new CPF("399.743.590-15")).getId();
-        PatientStatusEnum newStatus = PatientStatusEnum.TREATMENT_FINISHED;  
-        ChangePacienteStatusInterector changePacienteStatus = changePacienteStatusInterectorFactory.create(newStatus);      
-        assertThrows(PatientStatusException.class, () -> changePacienteStatus.execute(patientId), "Nao pode finalizar atendimento de um paciente sem estar com o atendimento em andamento");
+        assertThrows(PatientStatusException.class, () -> changePacienteStatusInterector.execute(patientId, PatientStatusEnum.TREATMENT_FINISHED), "Nao pode finalizar atendimento de um paciente sem estar com o atendimento em andamento");
     }
 
     @Test
     public void ReturnsErrorWhenInterruptedAFinishedService() {        
         String patientId = patientRepository.findPatientByCpf(new CPF("014.565.740-00")).getId();
-        PatientStatusEnum newStatus = PatientStatusEnum.TREATMENT_STOPED; 
-        ChangePacienteStatusInterector changePacienteStatus = changePacienteStatusInterectorFactory.create(newStatus);             
-        assertThrows(PatientStatusException.class, () -> changePacienteStatus.execute(patientId), "Só é possivel interromper um tratamento quando o tratamento esta em andamento");
+        assertThrows(PatientStatusException.class, () -> changePacienteStatusInterector.execute(patientId, PatientStatusEnum.TREATMENT_STOPED), "Só é possivel interromper um tratamento quando o tratamento esta em andamento");
     }
     
 }
