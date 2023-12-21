@@ -20,7 +20,7 @@ public interface PatientRepository {
 
     Patient findFullPatientById(String id);
 
-    Patient findPatientByCpf(CPF cpf);
+    Patient findPatientByCPF(CPF cpf);
     
     boolean existisOtherPatientWithSameCPF(String id, CPF cpf);
 

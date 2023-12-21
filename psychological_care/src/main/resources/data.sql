@@ -78,6 +78,7 @@ insert into patient (id, name, cpf, rg, date_birth, price, schooling, gender, ad
 insert into patient (id, name, cpf, rg, date_birth, price, schooling, gender, address, status, observation) values ('paciente_2', 'Saori Athena', '399.743.590-15', '11.22.654-7', '1991-09-15', 100, 'Dontorado', 'Feminino', 'Grecia', 'Tratamento Finalizado', 'Forte');
 insert into patient (id, name, cpf, rg, date_birth, price, schooling, gender, address, status, observation) values ('paciente_4', 'Shiriu', '877.441.558-88', '22.75.854-4', '1990-08-10', 100, 'Dontorado', 'Feminino', 'Grecia', 'Tratamento Finalizado', 'Forte');
 insert into patient (id, name, cpf, rg, date_birth, price, schooling, gender, address, status, observation) values ('paciente_5', 'June', '581.743.210-20', '55.75.854-4', '1991-09-15', 100, 'Dontorado', 'Feminino', 'Grecia', 'Tratamento Finalizado', 'Persistente');
+insert into patient (id, name, cpf, rg, date_birth, price, schooling, gender, address, status, observation) values ('paciente_6', 'Marin', '437.281.690-13', '57.22.441-1', '1989-10-04', 100, 'Mestre', 'Feminino', 'Grecia', 'Tratamento Finalizado', 'Voz da experiencia');
 insert into responsible (id, name, cpf, rg, date_birth, parentenge, patient_id) values ('paciente_3', 'Shun de Andromeda', '050.495.530-67', '55.478.665-2', '1989-05-04', "Brother", 'paciente_1');
 
 insert into contact (id, email, telephone, patient_id, responsible_id) values ("contact_1", 'seiya@email.com', '11 85488-5844', 'paciente_1', null); 

@@ -1,7 +1,6 @@
 package br.com.jjohnys.psychological_care.psychological_support.application.usecases.change_patient_status;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import br.com.jjohnys.psychological_care.exceptions.PatientStatusException;
 import br.com.jjohnys.psychological_care.psychological_support.domain.Patient;

@@ -13,10 +13,11 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import br.com.jjohnys.psychological_care.psychological_support.domain.Attendance;
+import br.com.jjohnys.psychological_care.psychological_support.gateways.AttendanceRepository;
 import br.com.jjohnys.psychological_care.utils.DateUtils;
 
 @Repository
-public class AttendanceJDBC {
+public class AttendanceJDBC  implements AttendanceRepository{
 
     @Autowired
     JdbcTemplate jdbcTemplate;
