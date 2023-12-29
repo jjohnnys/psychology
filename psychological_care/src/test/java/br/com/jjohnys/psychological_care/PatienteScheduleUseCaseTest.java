@@ -45,7 +45,7 @@ public class PatienteScheduleUseCaseTest {
         PatientScheduleDTO patientScheduleDTO = new PatientScheduleDTO(patient.getId(), dayOfWeek.getDaysOfWeek(), timesOfMonth, "10:30:00", PatientSchedule.TypeWeekEnum.PAIR.getTypeWeek());
         createPatientScheduleUseCase.create(patientScheduleDTO);
         
-        PatientSchedule patientSchedule = patientScheduleRepository.getScheduleByPatienteId(patient.getId());
+        PatientSchedule patientSchedule = patientScheduleRepository.getScheduleByPatientId(patient.getId());
         assertEquals(dayOfWeek, patientSchedule.getDayOfWeek());
         assertEquals(timesOfMonth, patientSchedule.getTimesOfMonth());
         assertEquals(time, patientSchedule.getTime());
@@ -63,7 +63,7 @@ public class PatienteScheduleUseCaseTest {
         PatientScheduleDTO patientScheduleDTO = new PatientScheduleDTO(patient.getId(), dayOfWeek.getDaysOfWeek(), timesOfMonth, "10:30:00", PatientSchedule.TypeWeekEnum.ODD.getTypeWeek());
         updatePatientScheduleUseCase.update(patientScheduleDTO);
         
-        PatientSchedule patientSchedule = patientScheduleRepository.getScheduleByPatienteId(patient.getId());
+        PatientSchedule patientSchedule = patientScheduleRepository.getScheduleByPatientId(patient.getId());
         assertEquals(dayOfWeek, patientSchedule.getDayOfWeek());
         assertEquals(timesOfMonth, patientSchedule.getTimesOfMonth());
         assertEquals(time, patientSchedule.getTime());

@@ -11,20 +11,12 @@ import br.com.jjohnys.psychological_care.psychological_support.domain.value_obje
 public interface PatientRepository {
 
     void insertPatient(Patient patient, List<Contact> contactsPatient, List<Responsible> responsibles, List<Contact> contactsResponsible);
-
     void updatePatient(Patient patient, List<Contact> contactsPatient, List<Responsible> responsibles, List<Contact> contactsResponsible);
-
     List<Patient> findPatientByName(String name);
-
-    Patient findPatientById(String id); 
-
+    Patient findPatientById(String id);
     Patient findFullPatientById(String id);
-
-    Patient findPatientByCPF(CPF cpf);
-    
+    Patient findPatientByCPF(CPF cpf);    
     boolean existisOtherPatientWithSameCPF(String id, CPF cpf);
-
     boolean existisOtherResponsibleWithSameCPF(String id, CPF cpf);
-
     int changeStatusPatient(String patientId, PatientStatusEnum status);
 }

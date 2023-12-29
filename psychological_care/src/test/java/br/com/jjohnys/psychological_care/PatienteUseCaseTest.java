@@ -162,7 +162,7 @@ public class PatienteUseCaseTest {
         PatientScheduleDTO patientScheduleDTO = new PatientScheduleDTO(patient.getId(), dayOfWeek.getDaysOfWeek(), timesOfMonth, "10:30:00", PatientSchedule.TypeWeekEnum.PAIR.getTypeWeek());
         createPatientScheduleUseCase.create(patientScheduleDTO);
         stopAtendenceInterector.execute(patient.getId());
-        PatientSchedule patientSchedule = patientScheduleRepository.getScheduleByPatienteId(patient.getId());
+        PatientSchedule patientSchedule = patientScheduleRepository.getScheduleByPatientId(patient.getId());
         assertNull(patientSchedule);
 
     }

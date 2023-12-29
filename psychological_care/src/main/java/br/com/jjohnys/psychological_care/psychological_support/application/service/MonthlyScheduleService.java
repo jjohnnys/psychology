@@ -18,7 +18,7 @@ public class MonthlyScheduleService {
 
     public String[] getDays(String patientId, int year, int month) {
         String[] daysOfMonth = null;
-        PatientSchedule patientSchedule = patientScheduleRepository.getScheduleByPatienteId(patientId);
+        PatientSchedule patientSchedule = patientScheduleRepository.getScheduleByPatientId(patientId);
         daysOfMonth = new String[patientSchedule.getTimesOfMonth()];
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.YEAR, year);
