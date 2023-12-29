@@ -20,7 +20,6 @@ public class UpdatePatientScheduleUseCaseInterector {
 
     public void update(PatientScheduleDTO patientScheduleDTO) {
         Patient patient = patientRepository.findPatientById(patientScheduleDTO.patienteId());
-        if(patient == null) throw new BusinessExceptions("Paciente nao cadastrado");
         PatientSchedule patientSchedule = new PatientSchedule(patient, patientScheduleDTO.daysOfWeekEnum(), patientScheduleDTO.timesOfMonth(), patientScheduleDTO.timeOfDayLocalTime(), patientScheduleDTO.typeWeekEnum());
         patientSchedule.vaidateTimesOfMonth();
         PatientSchedule period = patienteScheduleRepository.getScheduleByPatientePeriod(patientSchedule.getTime(), patientSchedule.getTime().plusHours(1) , patientSchedule.getDayOfWeek(), patientSchedule.getTypeWeek());

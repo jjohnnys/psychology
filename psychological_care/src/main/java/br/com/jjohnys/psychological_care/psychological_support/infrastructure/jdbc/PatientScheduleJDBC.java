@@ -11,9 +11,10 @@ import org.springframework.stereotype.Repository;
 
 import br.com.jjohnys.psychological_care.psychological_support.domain.PatientSchedule;
 import br.com.jjohnys.psychological_care.psychological_support.domain.enums.DaysOfWeekEnum;
+import br.com.jjohnys.psychological_care.psychological_support.gateways.PatientScheduleRepository;
 
 @Repository
-public class PatientScheduleJDBC {
+public class PatientScheduleJDBC implements PatientScheduleRepository{
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -36,7 +37,7 @@ public class PatientScheduleJDBC {
         return jdbcTemplate.update(delete, patientId);
     }
 
-    public PatientSchedule getScheduleByPatienteId(String patientId) {
+    public PatientSchedule getScheduleByPatientId(String patientId) {
         String query = "select * from patient_schedule where patient_id = ?";
         try {            
             return jdbcTemplate.queryForObject(query, (rs, rowNum) -> createPatientSchedule(rs), new Object[]{patientId});
