@@ -3,13 +3,12 @@ package br.com.jjohnys.psychological_care.psychological_support.application.usec
 import org.springframework.stereotype.Service;
 
 import br.com.jjohnys.psychological_care.psychological_support.domain.Attendance;
-import br.com.jjohnys.psychological_care.psychological_support.gateways.AttendanceRepository;
 
 @Service
 public class UpdateAttendanceInterector extends AttendanceInterector {
 
     @Override
-    public void save(Attendance attendance, AttendanceRepository attendanceRepository) {
+    public void save(Attendance attendance) {
         attendanceRepository.updateAttendance(attendance);
     }
     

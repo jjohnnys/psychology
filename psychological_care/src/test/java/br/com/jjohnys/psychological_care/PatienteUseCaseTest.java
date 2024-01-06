@@ -16,11 +16,10 @@ import br.com.jjohnys.psychological_care.exceptions.PatientStatusException;
 import br.com.jjohnys.psychological_care.psychological_support.application.dto.ContactDTO;
 import br.com.jjohnys.psychological_care.psychological_support.application.dto.PatientDTO;
 import br.com.jjohnys.psychological_care.psychological_support.application.dto.PatientScheduleDTO;
+import br.com.jjohnys.psychological_care.psychological_support.application.usecases.ChangePacienteStatusInterector;
 import br.com.jjohnys.psychological_care.psychological_support.application.usecases.CreatePatientInterector;
 import br.com.jjohnys.psychological_care.psychological_support.application.usecases.CreatePatientScheduleUseCaseInterector;
 import br.com.jjohnys.psychological_care.psychological_support.application.usecases.UpdatePatientInterector;
-import br.com.jjohnys.psychological_care.psychological_support.application.usecases.change_patient_status.FinishAtendenceInterector;
-import br.com.jjohnys.psychological_care.psychological_support.application.usecases.change_patient_status.StopAtendenceInterector;
 import br.com.jjohnys.psychological_care.psychological_support.domain.Contact;
 import br.com.jjohnys.psychological_care.psychological_support.domain.Patient;
 import br.com.jjohnys.psychological_care.psychological_support.domain.PatientSchedule;
@@ -47,9 +46,8 @@ public class PatienteUseCaseTest {
     @Autowired 
     PatientScheduleRepository patientScheduleRepository;
     @Autowired
-    private FinishAtendenceInterector finishAtendenceInterector;
-    @Autowired
-    private StopAtendenceInterector stopAtendenceInterector;
+    private ChangePacienteStatusInterector changePacienteStatusInterector;
+
     
 
     @Test
@@ -145,7 +143,7 @@ public class PatienteUseCaseTest {
     @Test
     public void changeStatusPatient() {
         String patientId = patientRepository.findPatientByCPF(new CPF("014.565.740-00")).getId();
-        finishAtendenceInterector.execute(patientId);
+        changePacienteStatusInterector.execute(patientId, PatientStatusEnum.TREATMENT_FINISHED);
         Patient patient = patientRepository.findPatientByCPF(new CPF("014.565.740-00"));
         assertEquals(patient.getStatus(), PatientStatusEnum.TREATMENT_FINISHED, "Status alterado com sucesso");
     }
@@ -161,7 +159,7 @@ public class PatienteUseCaseTest {
         Integer timesOfMonth = 4;                
         PatientScheduleDTO patientScheduleDTO = new PatientScheduleDTO(patient.getId(), dayOfWeek.getDaysOfWeek(), timesOfMonth, "10:30:00", PatientSchedule.TypeWeekEnum.PAIR.getTypeWeek());
         createPatientScheduleUseCase.create(patientScheduleDTO);
-        stopAtendenceInterector.execute(patient.getId());
+        changePacienteStatusInterector.execute(patient.getId(), PatientStatusEnum.TREATMENT_STOPED);
         PatientSchedule patientSchedule = patientScheduleRepository.getScheduleByPatientId(patient.getId());
         assertNull(patientSchedule);
 
@@ -170,13 +168,13 @@ public class PatienteUseCaseTest {
     @Test
     public void ReturnsErrorWhenCompletingServiceWithoutBeingInProgress() {        
         String patientId = patientRepository.findPatientByCPF(new CPF("399.743.590-15")).getId();
-        assertThrows(PatientStatusException.class, () -> finishAtendenceInterector.execute(patientId), "Nao pode finalizar atendimento de um paciente sem estar com o atendimento em andamento");
+        assertThrows(PatientStatusException.class, () -> changePacienteStatusInterector.execute(patientId, PatientStatusEnum.TREATMENT_FINISHED), "Nao pode finalizar atendimento de um paciente sem estar com o atendimento em andamento");
     }
 
     @Test
     public void ReturnsErrorWhenInterruptedAFinishedService() {        
         String patientId = patientRepository.findPatientByCPF(new CPF("437.281.690-13")).getId();
-        assertThrows(PatientStatusException.class, () -> stopAtendenceInterector.execute(patientId), "Só é possivel interromper um tratamento quando o tratamento esta em andamento");
+        assertThrows(PatientStatusException.class, () -> changePacienteStatusInterector.execute(patientId, PatientStatusEnum.TREATMENT_STOPED), "Só é possivel interromper um tratamento quando o tratamento esta em andamento");
     }
     
 }

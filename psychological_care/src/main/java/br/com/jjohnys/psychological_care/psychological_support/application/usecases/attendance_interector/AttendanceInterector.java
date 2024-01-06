@@ -15,13 +15,13 @@ public abstract class AttendanceInterector {
     @Autowired
     private PatientRepository patientRepository;
     @Autowired
-    private AttendanceRepository attendanceRepository;
+    protected AttendanceRepository attendanceRepository;
 
-    public abstract void save(Attendance attendance, AttendanceRepository attendanceRepository);
+    public abstract void save(Attendance attendance);
 
     public void execute(AttendanceDTO attendanceDTO) {
         Attendance attendance = validate(attendanceDTO);
-        save(attendance, attendanceRepository);
+        save(attendance);
     }
     
     public Attendance validate(AttendanceDTO attendanceDTO) {
